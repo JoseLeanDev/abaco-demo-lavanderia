@@ -1,0 +1,451 @@
+/**
+ * AI Service - Integración con LLM via OpenRouter
+ * Usa Claude 3.7 Sonnet via OpenRouter
+ */
+
+const axios = require('axios');
+
+const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
+const OPENROUTER_MODEL = 'anthropic/claude-sonnet-4.6';
+const OPENROUTER_FALLBACK_MODEL = 'openai/gpt-4o';
+
+class AIService {
+  constructor() {
+    this.apiKey = process.env.OPENROUTER_API_KEY;
+    this.requestCount = 0;
+    this.errorCount = 0;
+  }
+
+  /**
+   * Análisis financiero inteligente con LLM
+   */
+  async analizarDatos(data, context, taskType = 'general') {
+    const startTime = Date.now();
+    
+    try {
+      const prompt = this.construirPrompt(data, context, taskType);
+      const response = await this.llamarLLM(prompt);
+      
+      return {
+        exito: true,
+        analisis: this.parsearRespuesta(response),
+        raw: response,
+        duracion_ms: Date.now() - startTime,
+        tokens_usados: response.usage?.total_tokens || null
+      };
+    } catch (error) {
+      this.errorCount++;
+      console.error('[AIService] Error en análisis:', error.message);
+      return {
+        exito: false,
+        error: error.message,
+        duracion_ms: Date.now() - startTime,
+        analisis: null
+      };
+    }
+  }
+
+  /**
+   * Detectar anomalías usando LLM
+   */
+  async detectarAnomaliasIA(transacciones, saldos) {
+    const prompt = `
+Eres un auditor financiero experto. Analiza los siguientes datos y detecta anomalías, patrones sospechosos o riesgos:
+
+## DATOS DE TRANSACCIONES RECIENTES:
+${JSON.stringify(transacciones.slice(0, 50), null, 2)}
+
+## SALDOS DE CUENTAS:
+${JSON.stringify(saldos, null, 2)}
+
+## TU TAREA:
+1. Identifica transacciones atípicas o sospechosas
+2. Detecta posibles duplicados
+3. Señala montos inusualmente altos o bajos
+4. Identifica patrones de fraccionamiento
+5. Detecta saldos negativos en cuentas de activo
+
+Responde en formato JSON:
+{
+  "anomalias": [
+    {
+      "tipo": "tipo_anomalia",
+      "severidad": "alta|media|baja",
+      "descripcion": "descripción detallada",
+      "transacciones_afectadas": [ids],
+      "monto_impacto": 0,
+      "recomendacion": "acción recomendada"
+    }
+  ],
+  "resumen": "resumen ejecutivo",
+  "riesgo_general": "alto|medio|bajo"
+}`;
+
+    return this.analizarDatos({ transacciones, saldos }, prompt, 'auditoria');
+  }
+
+  /**
+   * Generar insights financieros con LLM
+   */
+  async generarInsightsIA(metricas, tendencias) {
+    const prompt = `
+Eres un CFO (Chief Financial Officer) experto. Analiza las métricas financieras y genera insights accionables.
+
+## MÉTRICAS ACTUALES:
+${JSON.stringify(metricas, null, 2)}
+
+## TENDENCIAS HISTÓRICAS:
+${JSON.stringify(tendencias, null, 2)}
+
+## TU TAREA:
+1. Identifica tendencias preocupantes o alentadoras
+2. Detecta desviaciones del presupuesto
+3. Sugiere acciones correctivas o preventivas
+4. Genera un "CFO Brief" ejecutivo
+
+Responde en formato JSON:
+{
+  "insights": [
+    {
+      "categoria": "liquidez|rentabilidad|crecimiento|riesgo",
+      "titulo": "título del insight",
+      "descripcion": "descripción detallada",
+      "accion_recomendada": "qué hacer",
+      "prioridad": "alta|media|baja",
+      "impacto_estimado": "descripción del impacto"
+    }
+  ],
+  "brief_ejecutivo": "resumen para el CEO",
+  "alertas": ["alerta 1", "alerta 2"]
+}`;
+
+    return this.analizarDatos({ metricas, tendencias }, prompt, 'analisis');
+  }
+
+  /**
+   * Analizar conciliaciones bancarias con LLM
+   */
+  async analizarConciliacionIA(movimientosBanco, transaccionesLibro) {
+    const prompt = `
+Eres un experto en conciliaciones bancarias. Analiza estos datos y detecta discrepancias.
+
+## MOVIMIENTOS BANCARIOS:
+${JSON.stringify(movimientosBanco.slice(0, 30), null, 2)}
+
+## TRANSACCIONES EN LIBROS:
+${JSON.stringify(transaccionesLibro.slice(0, 30), null, 2)}
+
+## TU TAREA:
+1. Identifica transacciones no conciliadas
+2. Detecta diferencias de montos
+3. Encuentra transacciones en el banco no registradas en libros
+4. Sugiere ajustes necesarios
+
+Responde en formato JSON:
+{
+  "diferencias": [
+    {
+      "tipo": "no_en_libros|no_en_banco|monto_diferente",
+      "descripcion": "descripción",
+      "monto_banco": 0,
+      "monto_libro": 0,
+      "diferencia": 0,
+      "fecha": "YYYY-MM-DD",
+      "accion_sugerida": "acción"
+    }
+  ],
+  "resumen": "resumen de la conciliación",
+  "saldo_conciliado": false,
+  "ajustes_necesarios": [{"descripcion": "", "monto": 0}]
+}`;
+
+    return this.analizarDatos({ movimientosBanco, transaccionesLibro }, prompt, 'conciliacion');
+  }
+
+  /**
+   * Generar respuesta conversacional del agente
+   * @param {string} mensaje - Mensaje del usuario
+   * @param {Object} contexto - Contexto financiero
+   * @returns {Promise<string>} - Respuesta del agente
+   */
+  async conversar(mensaje, contexto) {
+    const systemPrompt = `Eres Finn, abaco Agent — un asistente financiero experto, profesional pero cercano. Tienes acceso EN TIEMPO REAL a los datos financieros de la empresa.
+
+## TU MISIÓN
+Responde cualquier consulta financiera usando los datos reales que tienes abajo. NO inventes números. Si un dato está en el contexto, úsalo. Si no lo tienes, dilo claramente.
+
+## DATOS DISPONIBLES (contexto actual al ${contexto.fecha_actual || new Date().toISOString().split('T')[0]})
+
+### 💰 LIQUIDEZ
+- Efectivo GTQ: Q${(contexto.liquidez?.gtq || 0).toLocaleString()}
+- Efectivo USD: $${(contexto.liquidez?.usd || 0).toLocaleString()}
+- Cuentas bancarias activas: ${contexto.liquidez?.total_cuentas || 0}
+- Runway: ${contexto.runway?.dias || 0} días (gasto diario estimado Q${(contexto.runway?.gasto_diario_estimado || 50000).toLocaleString()})
+
+### 👥 CUENTAS POR COBRAR (CxC)
+- Total pendiente: Q${(contexto.cxc?.total || 0).toLocaleString()} (${contexto.cxc?.facturas || 0} facturas)
+- Días promedio de cobro (DSO): ${contexto.cxc?.dias_promedio || 0} días
+- Aging: ${JSON.stringify(contexto.cxc?.aging || [])}
+- Top deudores: ${JSON.stringify(contexto.cxc?.top_deudores || []).slice(0, 500)}
+
+### 💳 CUENTAS POR PAGAR (CxP)
+- Total pendiente: Q${(contexto.cxp?.total || 0).toLocaleString()} (${contexto.cxp?.facturas || 0} facturas)
+- Próximos pagos (14 días): ${JSON.stringify(contexto.cxp?.proximos_pagos || []).slice(0, 500)}
+- Días promedio de pago (DPO): ${contexto.ccc?.dpo || 30} días
+
+### 🔄 CASH CONVERSION CYCLE (CCC)
+- Fórmula: DIO + DSO − DPO
+- DIO (Inventario): ${contexto.ccc?.dio || 45} días *(estimado, sin datos de inventario real)*
+- DSO (Cobro): ${contexto.ccc?.dso || 0} días
+- DPO (Pago): ${contexto.ccc?.dpo || 0} días
+- CCC total: ${contexto.ccc?.valor || 0} días
+- Interpretación: ${contexto.ccc?.interpretacion || 'N/A'}
+
+### 📈 VENTAS Y GASTOS (últimos 30 días)
+- Ventas: Q${(contexto.ventas_30d || 0).toLocaleString()}
+- Gastos: Q${(contexto.gastos_30d || 0).toLocaleString()}
+- Margen: ${contexto.margen_30d || 0}%
+
+### 📅 OBLIGACIONES SAT
+${JSON.stringify(contexto.obligaciones_sat || []).slice(0, 400)}
+
+### 🏦 BANCOS
+${JSON.stringify(contexto.bancos || []).slice(0, 400)}
+
+### 📝 TRANSACCIONES RECIENTES
+${JSON.stringify(contexto.transacciones_recientes || []).slice(0, 600)}
+
+## REGLAS DE RESPUESTA
+1. Usa los datos del contexto. NO inventes.
+2. Responde en español. Sé conciso pero completo.
+3. Si preguntan por CCC, explica qué es y da los números reales del contexto.
+4. Si preguntan por runway, usa los días reales del contexto.
+5. Si preguntan por KPIs, menciona CxC, CxP, CCC, runway, ventas, gastos.
+6. Si no tienes un dato específico, dilo: "No tengo ese dato en este momento".
+7. Incluye emojis para hacer la respuesta legible.
+8. Si detectas riesgos (ej: runway < 30 días, CxC > 60 días, CCC > 90), menciónalos como alertas.
+9. Para preguntas generales ("¿qué es CCC?"), explica el concepto Y da los números de la empresa.`;
+
+    try {
+      const response = await this.llamarLLM([
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: mensaje }
+      ], { jsonMode: false });
+      
+      return response.choices[0].message.content;
+    } catch (error) {
+      console.error('[AIService.conversar] Error completo:', error.message);
+      console.error('[AIService.conversar] Status:', error.response?.status);
+      console.error('[AIService.conversar] Data:', JSON.stringify(error.response?.data));
+      
+      // FALLBACK LOCAL: Generar respuesta directamente desde el contexto
+      return this.generarRespuestaLocal(mensaje, contexto);
+    }
+  }
+  
+  /**
+   * Genera una respuesta local usando los datos del contexto financiero
+   * No requiere API externa - funciona siempre
+   */
+  generarRespuestaLocal(mensaje, contexto) {
+    const msg = mensaje.toLowerCase();
+    
+    // RUNWAY
+    if (msg.includes('runway') || msg.includes('efectivo') || msg.includes('liquidez') || msg.includes('cuanto dinero')) {
+      const dias = contexto.runway?.dias || 0;
+      const gtq = contexto.liquidez?.gtq || 0;
+      const estado = dias < 30 ? '🚨 CRÍTICO' : dias < 90 ? '⚠️ Bajo' : '✅ Saludable';
+      return `💰 **Liquidez Actual**\n\n• Efectivo GTQ: Q${gtq.toLocaleString()}\n• Runway: **${dias} días** ${estado}\n• Gasto diario estimado: Q${(contexto.runway?.gasto_diario_estimado || 50000).toLocaleString()}\n\n${dias < 30 ? '⚠️ **Alerta:** Tu runway es crítico. Considera acelerar cobranzas o reducir gastos.' : dias < 90 ? 'ℹ️ Tienes liquidez aceptable pero monitorea de cerca.' : '✅ Tu posición de liquidez es saludable.'}`;
+    }
+    
+    // CCC
+    if (msg.includes('ccc') || msg.includes('cash conversion') || msg.includes('ciclo de efectivo')) {
+      const ccc = contexto.ccc;
+      return `🔄 **Cash Conversion Cycle (CCC)**\n\n• DIO (Inventario): ${ccc?.dio || 45} días\n• DSO (Cobro): ${ccc?.dso || 0} días\n• DPO (Pago): ${ccc?.dpo || 0} días\n• **CCC Total: ${ccc?.valor || 0} días**\n\n${ccc?.interpretacion || 'Interpretación no disponible'}\n\n💡 *CCC = DIO + DSO - DPO. Mide cuántos días tu dinero está "atrapado" en operaciones.*`;
+    }
+    
+    // CxC
+    if (msg.includes('cxc') || msg.includes('cobrar') || msg.includes('deudores') || msg.includes('clientes')) {
+      const cxc = contexto.cxc;
+      return `👥 **Cuentas por Cobrar**\n\n• Total pendiente: **Q${(cxc?.total || 0).toLocaleString()}**\n• Facturas pendientes: ${cxc?.facturas || 0}\n• Días promedio de cobro: ${cxc?.dias_promedio || 0} días\n\n**Top Deudores:**\n${(cxc?.top_deudores || []).map(d => `• ${d.cliente}: Q${(d.monto || 0).toLocaleString()} (${d.dias} días)`).join('\n') || 'Sin datos'}\n\n${(cxc?.dias_promedio || 0) > 60 ? '⚠️ DSO elevado - considera políticas de cobro más estrictas.' : ''}`;
+    }
+    
+    // CxP
+    if (msg.includes('cxp') || msg.includes('pagar') || msg.includes('proveedores') || msg.includes('pagos')) {
+      const cxp = contexto.cxp;
+      return `💳 **Cuentas por Pagar**\n\n• Total pendiente: **Q${(cxp?.total || 0).toLocaleString()}**\n• Facturas pendientes: ${cxp?.facturas || 0}\n\n**Próximos pagos (14 días):**\n${(cxp?.proximos_pagos || []).map(p => `• ${p.proveedor}: Q${(p.monto || 0).toLocaleString()} - vence ${p.fecha_vencimiento?.split('T')[0]}`).join('\n') || 'Sin vencimientos próximos'}\n\n💡 *DPO: ${contexto.ccc?.dpo || 30} días. Aprovecha plazos de pago sin afectar relaciones comerciales.*`;
+    }
+    
+    // KPIs generales
+    if (msg.includes('kpi') || msg.includes('metricas') || msg.includes('indicadores') || msg.includes('resumen')) {
+      return `📊 **KPIs Financieros - ${contexto.fecha_actual}**\n\n💰 **Liquidez:**\n• Efectivo: Q${(contexto.liquidez?.gtq || 0).toLocaleString()}\n• Runway: ${contexto.runway?.dias || 0} días\n\n👥 **CxC:**\n• Pendiente: Q${(contexto.cxc?.total || 0).toLocaleString()} (${contexto.cxc?.facturas || 0} facturas)\n• DSO: ${contexto.cxc?.dias_promedio || 0} días\n\n💳 **CxP:**\n• Pendiente: Q${(contexto.cxp?.total || 0).toLocaleString()} (${contexto.cxp?.facturas || 0} facturas)\n• DPO: ${contexto.ccc?.dpo || 30} días\n\n🔄 **CCC:** ${contexto.ccc?.valor || 0} días\n\n📈 **Ventas 30d:** Q${(contexto.ventas_30d || 0).toLocaleString()}\n📉 **Gastos 30d:** Q${(contexto.gastos_30d || 0).toLocaleString()}\n📊 **Margen:** ${contexto.margen_30d || 0}%`;
+    }
+    
+    // SAT
+    if (msg.includes('sat') || msg.includes('iva') || msg.includes('isr') || msg.includes('impuesto') || msg.includes('obligaciones')) {
+      const obs = contexto.obligaciones_sat || [];
+      return `📅 **Obligaciones SAT**\n\n${obs.length > 0 ? obs.map(o => `• ${o.tipo} - ${o.periodo} (vence ${o.fecha_vencimiento?.split('T')[0]})`).join('\n') : 'Sin obligaciones próximas registradas.'}\n\n${obs.length > 0 ? '⚠️ Asegúrate de cumplir con estas obligaciones para evitar multas.' : ''}`;
+    }
+    
+    // VENTAS
+    if (msg.includes('ventas') || msg.includes('ingresos') || msg.includes('facturacion')) {
+      return `📈 **Ventas (últimos 30 días)**\n\n• Total: **Q${(contexto.ventas_30d || 0).toLocaleString()}**\n• Gastos: Q${(contexto.gastos_30d || 0).toLocaleString()}\n• Margen: **${contexto.margen_30d || 0}%**\n\n${(contexto.margen_30d || 0) < 10 ? '⚠️ Margen bajo - revisa precios o costos.' : (contexto.margen_30d || 0) > 30 ? '✅ Buen margen.' : 'ℹ️ Margen en rango estándar.'}`;
+    }
+    
+    // GASTOS
+    if (msg.includes('gastos') || msg.includes('costos') || msg.includes('egresos')) {
+      return `📉 **Gastos (últimos 30 días)**\n\n• Total: **Q${(contexto.gastos_30d || 0).toLocaleString()}**\n• vs Ventas: Q${(contexto.ventas_30d || 0).toLocaleString()}\n• Margen: **${contexto.margen_30d || 0}%**\n\n💡 *Monitorea que los gastos no crezcan más rápido que las ventas.*`;
+    }
+    
+    // BANCOS
+    if (msg.includes('banco') || msg.includes('cuentas')) {
+      const bancos = contexto.bancos || [];
+      return `🏦 **Cuentas Bancarias**\n\n${bancos.map(b => `• ${b.banco}: Q${(parseFloat(b.saldo) || 0).toLocaleString()} (${b.moneda})`).join('\n') || 'Sin cuentas registradas.'}\n\nTotal cuentas: ${bancos.length}`;
+    }
+    
+    // Default / no reconocido
+    return `🤖 **abaco - Respuesta basada en datos actuales**\n\nTengo estos datos disponibles al ${contexto.fecha_actual}:\n\n• 💰 Efectivo: Q${(contexto.liquidez?.gtq || 0).toLocaleString()}\n• 📊 Runway: ${contexto.runway?.dias || 0} días\n• 👥 CxC: Q${(contexto.cxc?.total || 0).toLocaleString()}\n• 💳 CxP: Q${(contexto.cxp?.total || 0).toLocaleString()}\n• 🔄 CCC: ${contexto.ccc?.valor || 0} días\n• 📈 Ventas 30d: Q${(contexto.ventas_30d || 0).toLocaleString()}\n• 📉 Gastos 30d: Q${(contexto.gastos_30d || 0).toLocaleString()}\n\n💡 Pregúntame específicamente por: runway, CCC, CxC, CxP, KPIs, ventas, gastos, bancos, o SAT.`;
+  }
+
+  // ============ MÉTODOS PRIVADOS ============
+
+  construirPrompt(data, context, taskType) {
+    return `
+${context}
+
+Datos:
+${JSON.stringify(data, null, 2)}
+
+Responde únicamente en formato JSON válido.`;
+  }
+
+  async llamarLLM(messages, options = {}) {
+    this.requestCount++;
+    
+    const { jsonMode = true } = options;
+    const msgs = Array.isArray(messages) ? messages : [{ role: 'user', content: messages }];
+    
+    try {
+      const payload = {
+        model: OPENROUTER_MODEL,
+        messages: msgs,
+        temperature: 0.3,
+        max_tokens: 4000
+      };
+      
+      if (jsonMode) {
+        payload.response_format = { type: "json_object" };
+      }
+      
+      const response = await axios.post(
+        `${OPENROUTER_BASE_URL}/chat/completions`,
+        payload,
+        {
+          headers: {
+            'Authorization': `Bearer ${this.apiKey}`,
+            'Content-Type': 'application/json',
+            'HTTP-Referer': process.env.APP_URL || 'http://localhost:3000',
+            'X-Title': 'abaco Agents'
+          },
+          timeout: 60000
+        }
+      );
+      
+      return response.data;
+    } catch (error) {
+      console.error('[AIService.llamarLLM] Error completo:', error.message);
+      console.error('[AIService.llamarLLM] Status:', error.response?.status);
+      console.error('[AIService.llamarLLM] Data:', JSON.stringify(error.response?.data));
+      
+      // Intentar con modelo fallback si el primero falló por 404/429
+      if (error.response?.status === 404 || error.response?.status === 429) {
+        console.warn('[AIService] Modelo principal falló, intentando fallback:', error.message);
+        
+        const payload = {
+          model: OPENROUTER_FALLBACK_MODEL,
+          messages: msgs,
+          temperature: 0.3,
+          max_tokens: 4000
+        };
+        
+        if (jsonMode) {
+          payload.response_format = { type: "json_object" };
+        }
+        
+        const response = await axios.post(
+          `${OPENROUTER_BASE_URL}/chat/completions`,
+          payload,
+          {
+            headers: {
+              'Authorization': `Bearer ${this.apiKey}`,
+              'Content-Type': 'application/json',
+              'HTTP-Referer': process.env.APP_URL || 'http://localhost:3000',
+              'X-Title': 'abaco Agents'
+            },
+            timeout: 60000
+          }
+        );
+        
+        return response.data;
+      }
+      
+      // Fallback a modelo gratis si es error de auth (401) o credits (402)
+      if (error.response?.status === 401 || error.response?.status === 402) {
+        console.warn('[AIService] API key inválida o sin créditos, intentando modelo gratuito...');
+        
+        const freePayload = {
+          model: 'openrouter/owl-alpha',
+          messages: msgs,
+          temperature: 0.3,
+          max_tokens: 4000
+        };
+        
+        if (jsonMode) {
+          freePayload.response_format = { type: "json_object" };
+        }
+        
+        const freeResponse = await axios.post(
+          `${OPENROUTER_BASE_URL}/chat/completions`,
+          freePayload,
+          {
+            headers: {
+              'Authorization': `Bearer ${this.apiKey}`,
+              'Content-Type': 'application/json',
+              'HTTP-Referer': process.env.APP_URL || 'http://localhost:3000',
+              'X-Title': 'abaco Agents'
+            },
+            timeout: 60000
+          }
+        );
+        
+        return freeResponse.data;
+      }
+      
+      throw error;
+    }
+  }
+
+  parsearRespuesta(response) {
+    try {
+      const content = response.choices[0].message.content;
+      return JSON.parse(content);
+    } catch (e) {
+      console.error('[AIService] Error parseando respuesta:', e);
+      return { raw: response.choices[0].message.content };
+    }
+  }
+
+  getStats() {
+    return {
+      provider: 'openrouter',
+      model: OPENROUTER_MODEL,
+      requests: this.requestCount,
+      errors: this.errorCount,
+      success_rate: this.requestCount > 0 
+        ? ((this.requestCount - this.errorCount) / this.requestCount * 100).toFixed(2) + '%'
+        : 'N/A'
+    };
+  }
+}
+
+module.exports = new AIService();

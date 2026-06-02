@@ -1,0 +1,432 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   abaco - Cal.com Design System
+   Estética: Open Source, Accessible, Trustworthy
+   Clean scheduling, neutral palette, transparency
+   ============================================ */
+
+@layer base {
+  :root {
+    /* Core - Clean & Accessible */
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F3F4F6;
+    --bg-tertiary: #E5E7EB;
+    --bg-elevated: #FFFFFF;
+    
+    /* Text - High Contrast Accessibility */
+    --text-primary: #111827;
+    --text-secondary: #4B5563;
+    --text-tertiary: #6B7280;
+    --text-muted: #9CA3AF;
+    
+    /* Brand - abaco Blue */
+    --brand-primary: #001639;
+    --brand-secondary: #002a5c;
+    
+    /* Accent - abaco Orange */
+    --accent-orange: #f95f34;
+    --accent-orange-light: #ff7a5c;
+    --accent-orange-subtle: #fff0eb;
+    
+    /* Accent - Functional Blue */
+    --accent-blue: #2563EB;
+    --accent-blue-light: #3B82F6;
+    --accent-blue-subtle: #EFF6FF;
+    
+    /* Semantic - Clear Status */
+    --success: #059669;
+    --success-bg: #ECFDF5;
+    --warning: #D97706;
+    --warning-bg: #FFFBEB;
+    --danger: #DC2626;
+    --danger-bg: #FEF2F2;
+    --info: #2563EB;
+    --info-bg: #EFF6FF;
+    
+    /* Borders - Subtle Definition */
+    --border-subtle: rgba(0, 0, 0, 0.06);
+    --border-default: #E5E7EB;
+    --border-strong: #D1D5DB;
+    
+    /* Typography - Clean Sans */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    
+    /* Spacing - Generous & Clear */
+    --section-gap: 2rem;
+    --card-padding: 1.5rem;
+    
+    /* Radius - Soft & Friendly */
+    --radius-sm: 6px;
+    --radius: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    
+    /* Shadows - Subtle Depth */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+@layer base {
+  * {
+    @apply border-[var(--border-default)];
+  }
+  
+  html {
+    font-family: var(--font-sans);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  body {
+    @apply min-h-screen;
+    background-color: var(--bg-secondary);
+  }
+  
+  h1, h2, h3, h4 {
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+  }
+  
+  h1 {
+    @apply text-2xl;
+  }
+  
+  h2 {
+    @apply text-xl;
+  }
+  
+  h3 {
+    @apply text-lg;
+  }
+  
+  /* Focus styles for accessibility */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-offset-2;
+    ring-color: var(--accent-blue);
+  }
+  
+  /* Selection */
+  ::selection {
+    background-color: var(--accent-blue);
+    color: white;
+  }
+}
+
+/* ============================================
+   COMPONENTS - Clean & Accessible
+   ============================================ */
+
+@layer components {
+  
+  /* Cards - Clean with subtle shadow */
+  .card {
+    @apply bg-white rounded-lg border;
+    border-color: var(--border-default);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .card-hover {
+    @apply transition-all duration-200;
+  }
+  
+  .card-hover:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+  
+  /* Section Headers - Clean */
+  .section-header {
+    @apply flex items-center gap-3 px-5 pt-5 pb-4 mb-4;
+    border-bottom: 1px solid var(--border-default);
+  }
+  
+  /* KPI Cards - Minimal */
+  .kpi-card {
+    @apply p-5 bg-white rounded-lg border;
+    border-color: var(--border-default);
+  }
+  
+  .kpi-value {
+    @apply text-2xl font-bold tabular-nums mt-1;
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+  }
+  
+  .kpi-label {
+    @apply text-xs uppercase tracking-wider;
+    color: var(--text-muted);
+  }
+  
+  .kpi-change {
+    @apply text-xs font-medium tabular-nums mt-1;
+    font-family: var(--font-mono);
+  }
+  
+  .kpi-change.positive {
+    color: var(--success);
+  }
+  
+  .kpi-change.negative {
+    color: var(--danger);
+  }
+  
+  /* Navigation - Clean sidebar */
+  .nav-link {
+    @apply flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors;
+    color: var(--text-secondary);
+  }
+  
+  .nav-link:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+  
+  .nav-link-active {
+    @apply flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium;
+    background-color: var(--brand-primary);
+    color: white;
+  }
+  
+  /* Buttons - Clear actions */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-all;
+  }
+  
+  .btn-primary {
+    @apply btn;
+    background-color: var(--brand-primary);
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--brand-secondary);
+  }
+  
+  .btn-secondary {
+    @apply btn;
+    background-color: white;
+    color: var(--text-primary);
+    border: 1px solid var(--border-strong);
+  }
+  
+  .btn-secondary:hover {
+    background-color: var(--bg-secondary);
+  }
+  
+  .btn-ghost {
+    @apply btn;
+    background-color: transparent;
+    color: var(--text-secondary);
+  }
+  
+  .btn-ghost:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+  
+  /* Badges - Status indicators */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-full;
+  }
+  
+  .badge-success {
+    @apply badge;
+    background-color: var(--success-bg);
+    color: var(--success);
+  }
+  
+  .badge-warning {
+    @apply badge;
+    background-color: var(--warning-bg);
+    color: var(--warning);
+  }
+  
+  .badge-danger {
+    @apply badge;
+    background-color: var(--danger-bg);
+    color: var(--danger);
+  }
+  
+  .badge-info {
+    @apply badge;
+    background-color: var(--info-bg);
+    color: var(--info);
+  }
+  
+  .badge-neutral {
+    @apply badge;
+    background-color: var(--bg-tertiary);
+    color: var(--text-secondary);
+  }
+  
+  /* Tables - Clean data */
+  .table-container {
+    @apply overflow-x-auto bg-white rounded-lg border;
+    border-color: var(--border-default);
+  }
+  
+  .table {
+    @apply w-full text-sm;
+  }
+  
+  .table th {
+    @apply px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider;
+    background-color: var(--bg-secondary);
+    color: var(--text-secondary);
+  }
+  
+  .table td {
+    @apply px-4 py-3;
+    border-bottom: 1px solid var(--border-default);
+  }
+  
+  .table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .table tr:hover td {
+    background-color: var(--bg-secondary);
+  }
+  
+  /* Inputs - Accessible */
+  .input {
+    @apply w-full px-3 py-2 text-sm bg-white border rounded-md transition-colors;
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+  }
+  
+  .input:hover {
+    border-color: var(--text-muted);
+  }
+  
+  .input:focus {
+    @apply outline-none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px var(--accent-blue-subtle);
+  }
+  
+  /* Status dots */
+  .status-dot {
+    @apply w-2 h-2 rounded-full;
+  }
+  
+  .status-dot.online {
+    background-color: var(--success);
+  }
+  
+  .status-dot.warning {
+    background-color: var(--warning);
+  }
+  
+  .status-dot.error {
+    background-color: var(--danger);
+  }
+  
+  /* Agent cards */
+  .agent-card {
+    @apply p-4 bg-white rounded-lg border transition-all;
+    border-color: var(--border-default);
+  }
+  
+  .agent-card:hover {
+    border-color: var(--accent-blue);
+    box-shadow: var(--shadow-md);
+  }
+  
+  /* Empty states */
+  .empty-state {
+    @apply flex flex-col items-center justify-center py-12 text-center;
+  }
+  
+  .empty-state-icon {
+    @apply w-12 h-12 rounded-full flex items-center justify-center mb-4;
+    background-color: var(--bg-tertiary);
+    color: var(--text-muted);
+  }
+}
+
+/* ============================================
+   UTILITIES
+   ============================================ */
+
+@layer utilities {
+  .text-brand {
+    color: var(--brand-primary);
+  }
+  
+  .bg-brand {
+    background-color: var(--brand-primary);
+  }
+  
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+  
+  /* Financial numbers */
+  .amount {
+    @apply tabular-nums font-semibold;
+    font-family: var(--font-mono);
+  }
+  
+  .amount-positive {
+    color: var(--success);
+  }
+  
+  .amount-negative {
+    color: var(--danger);
+  }
+  
+  /* Accessibility helpers */
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+    clip: rect(0, 0, 0, 0);
+  }
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* ============================================
+   SCROLLBAR - Minimal
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
