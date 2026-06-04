@@ -10,6 +10,9 @@ router.get('/', async (req, res) => {
   try {
     const empresaId = req.query.empresa_id || 1;
     
+    // DEBUG: Log que el endpoint se ejecutó
+    console.log('Dashboard endpoint called at', new Date().toISOString());
+    
     // KPIs de tesorería
     const posicionBancaria = await db.getAsync(`
       SELECT 
