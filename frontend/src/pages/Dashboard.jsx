@@ -103,7 +103,7 @@ export default function Dashboard() {
         <div>
           <h1 className="text-2xl font-semibold">Dashboard Ejecutivo</h1>
           <p className="text-sm text-[var(--text-muted)] mt-1">
-            Lavandería La Esperanza, S.A.
+            Lavandería El Siglo
           </p>
         </div>
         
