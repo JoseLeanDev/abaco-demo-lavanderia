@@ -267,6 +267,16 @@ CREATE TABLE IF NOT EXISTS snapshots_financieros (
   empresa_id INTEGER DEFAULT 1,
   tipo VARCHAR(100),
   fecha DATE,
+  metricas_json JSONB,
+  datos_json JSONB,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Snapshots diarios
+CREATE TABLE IF NOT EXISTS snapshots_diarios (
+  id SERIAL PRIMARY KEY,
+  empresa_id INTEGER DEFAULT 1,
+  fecha DATE,
   datos_json JSONB,
   created_at TIMESTAMP DEFAULT NOW()
 );

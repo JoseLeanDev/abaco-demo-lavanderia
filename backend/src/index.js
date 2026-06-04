@@ -7,6 +7,7 @@ const path = require('path');
 const { getCFOAICore, initializeCFOAICore } = require('./agents');
 const db = require('../database/connection');
 const { seedData } = require('../database/seed');
+const { setupDatabase } = require('../database/setupAuto');
 const { wakeUpMiddleware, ejecutarTareasPendientesWakeUp } = require('./services/wakeUpScheduler');
 
 const app = express();
@@ -70,32 +71,12 @@ async function setupAuthTables() {
   }
 }
 
-// Seed database if empty
+// Seed database with full setup
 async function seedDatabaseIfEmpty() {
   try {
-    console.log('\n🌱 Verificando si la base de datos necesita datos demo...');
-    
-    // Verificar si hay empresas
-    const empresaCount = await db.getAsync('SELECT COUNT(*) as count FROM empresas');
-    const count = parseInt(empresaCount?.count || 0);
-    
-    if (count === 0) {
-      console.log('   ⚠️ Base de datos vacía. Ejecutando seed...');
-      await seedData();
-      console.log('   ✅ Datos demo cargados exitosamente');
-    } else {
-      console.log(`   ✅ Base de datos ya tiene ${count} empresa(s). Seed omitido.`);
-    }
+    await setupDatabase();
   } catch (error) {
-    console.error('❌ Error en seedDatabaseIfEmpty:', error.message);
-    // Si hay error (tablas no existen), intentar crear seed
-    try {
-      console.log('   ⚠️ Intentando seed de todos modos...');
-      await seedData();
-      console.log('   ✅ Datos demo cargados exitosamente');
-    } catch (seedError) {
-      console.error('❌ Error en seed:', seedError.message);
-    }
+    console.error('❌ Error en setup:', error.message);
   }
 }
 
@@ -139,6 +120,24 @@ app.get('/api/health', (req, res) => {
     version: '1.0.0',
     environment: process.env.NODE_ENV || 'production'
   });
+});
+
+// Manual setup endpoint (for admin use)
+app.get('/api/setup', async (req, res) => {
+  try {
+    const result = await setupDatabase();
+    res.json({
+      status: result ? 'success' : 'error',
+      message: result ? 'Database setup completed' : 'Setup failed',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
 });
 
 // Serve static files from frontend/dist
