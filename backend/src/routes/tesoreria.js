@@ -8,7 +8,7 @@ const isPostgres = process.env.DATABASE_URL && process.env.DATABASE_URL.includes
 // GET /api/tesoreria/posicion
 router.get('/posicion', async (req, res) => {
   try {
-    const empresaId = req.query.empresa_id || 1;
+    const empresaId = req.query.empresa_id || 2; // Default: Lavandería La Esperanza
     
     // Usar DISTINCT para eliminar duplicados de la BD
     const cuentas = await db.allAsync(`
