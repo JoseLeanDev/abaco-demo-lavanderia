@@ -4,7 +4,7 @@ services:
     name: abaco-demo-lavanderia
     env: node
     plan: starter
-    buildCommand: cd backend && npm install && npm run build || true
+    buildCommand: cd backend && npm install && npm run migrate:postgres && npm run seed
     startCommand: cd backend && npm start
     envVars:
       - key: NODE_ENV
@@ -75,7 +75,7 @@ services:
         value: 15
       - key: SAT_DIAS_ALERTA_ISR
         value: 15
-    healthCheckPath: /health
+    healthCheckPath: /api/health
     autoDeploy: true
 
   # Background Worker
