@@ -136,7 +136,7 @@ export default function Tesoreria() {
                 <div className="flex-1 text-center">
                   <div className="text-3xl font-bold text-blue-600">{metricas.dio?.valor || 0}</div>
                   <div className="text-xs text-[var(--text-muted)] mt-1">DIO</div>
-                  <div className="text-[10px] text-[var(--text-muted)]">Días Inventario</div>
+                  <div className="text-[10px] text-[var(--text-muted)]">Días de Proceso</div>
                 </div>
                 
                 <div className="text-2xl text-[var(--text-muted)]">+</div>
@@ -180,7 +180,7 @@ export default function Tesoreria() {
                 <div className="absolute h-full bg-emerald-500" style={{ right: '0', width: `${Math.min((metricas.dpo?.dias_real || 0) / 120 * 100, 33)}%` }} />
               </div>
               <div className="flex justify-between text-xs text-[var(--text-muted)] mb-6">
-                <span className="text-blue-600">Inventario</span>
+                <span className="text-blue-600">Proceso</span>
                 <span className="text-purple-600">Cobro</span>
                 <span className="text-emerald-600">Pago</span>
               </div>

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import {
   ChartBarIcon,
   ArrowLeftIcon,
-  ShoppingCartIcon,
+  ShoppingBagIcon,
   MinusIcon,
   CubeIcon,
   CurrencyDollarIcon,
@@ -14,10 +14,6 @@ import {
   CalendarIcon,
   StarIcon,
 } from '@heroicons/react/24/outline'
-import {
-  demoHistorialVentasProducto,
-  demoMesesHistorial,
-} from '../data/demoData'
 
 const formatGTQ = (value) => {
   if (!value && value !== 0) return 'Q 0'
@@ -29,16 +25,43 @@ const formatNum = (value) => {
   return value.toLocaleString('es-GT')
 }
 
-const lineas = ['todas', 'Eléctrico', 'Plomería', 'Construcción', 'Pinturas', 'Herramientas', 'Jardinería']
+const lineas = ['todas', 'B2B - Hotelería', 'B2B - Restaurantes', 'B2B - Corporativo', 'B2B - Salud', 'B2C - Premium', 'B2C - Estándar']
 
 const coloresLinea = {
-  'Eléctrico': '#2563EB',
-  'Plomería': '#059669',
-  'Construcción': '#D97706',
-  'Pinturas': '#7C3AED',
-  'Herramientas': '#DC2626',
-  'Jardinería': '#0891B2',
+  'B2B - Hotelería': '#2563EB',
+  'B2B - Restaurantes': '#059669',
+  'B2B - Corporativo': '#D97706',
+  'B2B - Salud': '#7C3AED',
+  'B2C - Premium': '#DC2626',
+  'B2C - Estándar': '#0891B2',
 }
+
+// ============================================
+// DATOS DE SERVICIOS LAVANDERÍA
+// ============================================
+const demoHistorialServicios = [
+  // B2B - Hotelería
+  { id: 1, nombre: 'Lavandería Industrial Hotel Real Intercontinental', linea: 'B2B - Hotelería', precioVenta: 12.50, costoUnitario: 6.80, historial: [8200, 8450, 8100, 8600, 8800, 8950], margen: 45, proveedor: 'Operación propia' },
+  { id: 2, nombre: 'Lavandería Industrial Hotel Barceló', linea: 'B2B - Hotelería', precioVenta: 12.50, costoUnitario: 6.80, historial: [6500, 6700, 6400, 6800, 7000, 7100], margen: 45, proveedor: 'Operación propia' },
+  { id: 3, nombre: 'Lavado Ropa de Cama Hotel Casa Santo Domingo', linea: 'B2B - Hotelería', precioVenta: 18.00, costoUnitario: 11.70, historial: [3800, 3900, 3700, 4000, 4100, 4200], margen: 35, proveedor: 'Operación propia' },
+  // B2B - Restaurantes
+  { id: 4, nombre: 'Lavandería Industrial Grupo Cacao', linea: 'B2B - Restaurantes', precioVenta: 12.50, costoUnitario: 7.25, historial: [2800, 2900, 2700, 3000, 3100, 3200], margen: 42, proveedor: 'Operación propia' },
+  { id: 5, nombre: 'Servicio Express Restaurante Hacienda Real', linea: 'B2B - Restaurantes', precioVenta: 25.00, costoUnitario: 13.00, historial: [350, 380, 340, 400, 420, 450], margen: 48, proveedor: 'Operación propia' },
+  // B2B - Corporativo
+  { id: 6, nombre: 'Lavado Uniformes Golds Gym', linea: 'B2B - Corporativo', precioVenta: 8.50, costoUnitario: 5.27, historial: [2800, 2900, 2700, 3000, 3100, 3200], margen: 38, proveedor: 'Operación propia' },
+  { id: 7, nombre: 'Lavado Uniformes Corporativos', linea: 'B2B - Corporativo', precioVenta: 8.50, costoUnitario: 5.27, historial: [1200, 1250, 1100, 1300, 1350, 1400], margen: 38, proveedor: 'Operación propia' },
+  // B2B - Salud
+  { id: 8, nombre: 'Lavado Especializado Centro Médico Integral', linea: 'B2B - Salud', precioVenta: 15.00, costoUnitario: 9.00, historial: [1500, 1550, 1480, 1600, 1650, 1700], margen: 40, proveedor: 'Operación propia' },
+  { id: 9, nombre: 'Lavado Especializado Spa Santa María', linea: 'B2B - Salud', precioVenta: 15.00, costoUnitario: 9.00, historial: [800, 820, 750, 850, 880, 900], margen: 40, proveedor: 'Operación propia' },
+  // B2C - Premium
+  { id: 10, nombre: 'Tintorería y Planchado Premium', linea: 'B2C - Premium', precioVenta: 45.00, costoUnitario: 21.60, historial: [520, 540, 510, 560, 580, 600], margen: 52, proveedor: 'Operación propia' },
+  { id: 11, nombre: 'Servicio Express 24h (B2C)', linea: 'B2C - Premium', precioVenta: 25.00, costoUnitario: 13.00, historial: [380, 400, 370, 420, 440, 460], margen: 48, proveedor: 'Operación propia' },
+  // B2C - Estándar
+  { id: 12, nombre: 'Lavandería Doméstica B2C', linea: 'B2C - Estándar', precioVenta: 15.00, costoUnitario: 10.80, historial: [1100, 1150, 1050, 1200, 1250, 1300], margen: 28, proveedor: 'Operación propia' },
+  { id: 13, nombre: 'Lavado de Alfombras', linea: 'B2C - Estándar', precioVenta: 35.00, costoUnitario: 24.50, historial: [180, 190, 170, 200, 210, 220], margen: 30, proveedor: 'Operación propia' },
+]
+
+const demoMesesHistorial = ['Dic 2025', 'Ene 2026', 'Feb 2026', 'Mar 2026', 'Abr 2026', 'May 2026']
 
 // ============================================
 // GRÁFICA DE BARRAS VERTICAL (histórico por mes)
@@ -55,7 +78,7 @@ function GraficaHistorial({ historial, color, maxValor, meses }) {
           />
           {/* Tooltip */}
           <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#001639] text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
-            {formatNum(v)} und
+            {formatNum(v)} kg
           </div>
         </div>
       ))}
@@ -67,7 +90,6 @@ function GraficaHistorial({ historial, color, maxValor, meses }) {
 // GRÁFICA COMPARATIVA POR LÍNEA
 // ============================================
 function GraficaComparativaLineas({ datosPorLinea, meses }) {
-  // Encontrar valor máximo
   let max = 0
   Object.values(datosPorLinea).forEach(arr => {
     max = Math.max(max, ...arr)
@@ -82,7 +104,7 @@ function GraficaComparativaLineas({ datosPorLinea, meses }) {
           <div key={linea} className="space-y-1">
             <div className="flex items-center justify-between text-xs">
               <span className="font-medium" style={{ color: coloresLinea[linea] }}>{linea}</span>
-              <span className="font-mono text-[var(--text-muted)]">{formatNum(total)} und</span>
+              <span className="font-mono text-[var(--text-muted)]">{formatNum(total)} kg</span>
             </div>
             <div className="flex items-end gap-0.5 h-8">
               {valores.map((v, i) => (
@@ -107,39 +129,39 @@ function GraficaComparativaLineas({ datosPorLinea, meses }) {
   )
 }
 
-export default function HistorialVentas() {
+export default function HistorialServicios() {
   const [lineaSeleccionada, setLineaSeleccionada] = useState('todas')
-  const [vista, setVista] = useState('tarjetas') // tarjetas | tabla
+  const [vista, setVista] = useState('tarjetas')
 
-  // Filtrar productos
-  const productosFiltrados = useMemo(() => {
+  // Filtrar servicios
+  const serviciosFiltrados = useMemo(() => {
     const base = lineaSeleccionada === 'todas'
-      ? demoHistorialVentasProducto
-      : demoHistorialVentasProducto.filter(p => p.linea === lineaSeleccionada)
-    return base.map(p => {
-      const totalUnidades = p.historial.reduce((a, b) => a + b, 0)
-      const totalIngresos = p.historial.reduce((a, b) => a + b * p.precioVenta, 0)
-      const promedioMensual = Math.round(totalUnidades / 6)
-      const tendencia = p.historial[5] > p.historial[0] ? 'up' : p.historial[5] < p.historial[0] ? 'down' : 'stable'
-      const crecimiento = p.historial[0] > 0
-        ? (((p.historial[5] - p.historial[0]) / p.historial[0]) * 100).toFixed(1)
+      ? demoHistorialServicios
+      : demoHistorialServicios.filter(s => s.linea === lineaSeleccionada)
+    return base.map(s => {
+      const totalVolumen = s.historial.reduce((a, b) => a + b, 0)
+      const totalIngresos = s.historial.reduce((a, b) => a + b * s.precioVenta, 0)
+      const promedioMensual = Math.round(totalVolumen / 6)
+      const tendencia = s.historial[5] > s.historial[0] ? 'up' : s.historial[5] < s.historial[0] ? 'down' : 'stable'
+      const crecimiento = s.historial[0] > 0
+        ? (((s.historial[5] - s.historial[0]) / s.historial[0]) * 100).toFixed(1)
         : '0.0'
-      return { ...p, totalUnidades, totalIngresos, promedioMensual, tendencia, crecimiento: parseFloat(crecimiento) }
+      return { ...s, totalVolumen, totalIngresos, promedioMensual, tendencia, crecimiento: parseFloat(crecimiento) }
     }).sort((a, b) => b.totalIngresos - a.totalIngresos)
   }, [lineaSeleccionada])
 
   // KPIs globales
-  const totalUnidades = productosFiltrados.reduce((s, p) => s + p.totalUnidades, 0)
-  const totalIngresos = productosFiltrados.reduce((s, p) => s + p.totalIngresos, 0)
-  const totalMargen = productosFiltrados.reduce((s, p) => s + p.totalIngresos * (p.margen / 100), 0)
-  const productoTop = productosFiltrados[0]
+  const totalVolumen = serviciosFiltrados.reduce((s, srv) => s + srv.totalVolumen, 0)
+  const totalIngresos = serviciosFiltrados.reduce((s, srv) => s + srv.totalIngresos, 0)
+  const totalMargen = serviciosFiltrados.reduce((s, srv) => s + srv.totalIngresos * (srv.margen / 100), 0)
+  const servicioTop = serviciosFiltrados[0]
 
   // Datos por línea para gráfica comparativa
   const datosPorLinea = useMemo(() => {
     const resultado = {}
-    demoHistorialVentasProducto.forEach(p => {
-      if (!resultado[p.linea]) resultado[p.linea] = [0, 0, 0, 0, 0, 0]
-      p.historial.forEach((v, i) => { resultado[p.linea][i] += v })
+    demoHistorialServicios.forEach(s => {
+      if (!resultado[s.linea]) resultado[s.linea] = [0, 0, 0, 0, 0, 0]
+      s.historial.forEach((v, i) => { resultado[s.linea][i] += v })
     })
     return resultado
   }, [])
@@ -147,33 +169,31 @@ export default function HistorialVentas() {
   // Totales por mes
   const totalesPorMes = useMemo(() => {
     const meses = [0, 0, 0, 0, 0, 0]
-    productosFiltrados.forEach(p => {
-      p.historial.forEach((v, i) => { meses[i] += v })
+    serviciosFiltrados.forEach(s => {
+      s.historial.forEach((v, i) => { meses[i] += v })
     })
     return meses
-  }, [productosFiltrados])
+  }, [serviciosFiltrados])
 
   const maxValorHistorial = useMemo(() => {
     let max = 0
-    productosFiltrados.forEach(p => {
-      max = Math.max(max, ...p.historial)
+    serviciosFiltrados.forEach(s => {
+      max = Math.max(max, ...s.historial)
     })
     return max * 1.1
-  }, [productosFiltrados])
+  }, [serviciosFiltrados])
 
   return (
     <div className="space-y-6 animate-fade-in max-w-7xl">
-      {/* ============================================
-          BREADCRUMBS + HEADER
-      ============================================ */}
+      {/* BREADCRUMBS + HEADER */}
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
-          <Link to="/compras" className="flex items-center gap-1 hover:text-[var(--text-primary)] transition-colors">
-            <ShoppingCartIcon className="w-4 h-4" />
-            Compras
+          <Link to="/analisis" className="flex items-center gap-1 hover:text-[var(--text-primary)] transition-colors">
+            <ChartBarIcon className="w-4 h-4" />
+            Análisis
           </Link>
           <span>/</span>
-          <span className="text-[var(--text-primary)] font-medium">Historial de Ventas</span>
+          <span className="text-[var(--text-primary)] font-medium">Historial de Servicios</span>
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -182,35 +202,33 @@ export default function HistorialVentas() {
               <ChartBarIcon className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-semibold">Historial de Ventas por Línea</h1>
+              <h1 className="text-2xl font-semibold">Historial de Servicios por Línea</h1>
               <p className="text-sm text-[var(--text-muted)]">
-                Análisis de ventas por producto — 6 meses de historial
+                Análisis de servicios de lavandería — 6 meses de historial
               </p>
             </div>
           </div>
 
           <Link
-            to="/compras"
+            to="/analisis"
             className="btn-secondary text-sm flex items-center gap-2 self-start sm:self-auto"
           >
             <ArrowLeftIcon className="w-4 h-4" />
-            Volver a Compras
+            Volver a Análisis
           </Link>
         </div>
       </div>
 
-      {/* ============================================
-          KPIs
-      ============================================ */}
+      {/* KPIs */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="kpi-card card-hover">
           <div className="flex items-center justify-between mb-2">
-            <span className="kpi-label">Total Unidades 6M</span>
+            <span className="kpi-label">Total Volumen 6M</span>
             <CubeIcon className="w-4 h-4 text-[var(--text-muted)]" />
           </div>
-          <div className="kpi-value">{formatNum(totalUnidades)}</div>
+          <div className="kpi-value">{formatNum(totalVolumen)} kg</div>
           <span className="text-xs text-[var(--text-muted)]">
-            {productosFiltrados.length} productos
+            {serviciosFiltrados.length} servicios
           </span>
         </div>
 
@@ -220,7 +238,7 @@ export default function HistorialVentas() {
             <CurrencyDollarIcon className="w-4 h-4 text-[var(--text-muted)]" />
           </div>
           <div className="kpi-value">{formatGTQ(totalIngresos)}</div>
-          <span className="text-xs text-[var(--text-muted)]">Ventas acumuladas</span>
+          <span className="text-xs text-[var(--text-muted)]">Servicios acumulados</span>
         </div>
 
         <div className="kpi-card card-hover">
@@ -236,25 +254,23 @@ export default function HistorialVentas() {
 
         <div className="kpi-card card-hover">
           <div className="flex items-center justify-between mb-2">
-            <span className="kpi-label">Producto #1</span>
+            <span className="kpi-label">Servicio #1</span>
             <StarIcon className="w-4 h-4 text-[var(--warning)]" />
           </div>
-          <div className="kpi-value text-lg">{productoTop ? formatGTQ(productoTop.totalIngresos) : 'Q 0'}</div>
+          <div className="kpi-value text-lg">{servicioTop ? formatGTQ(servicioTop.totalIngresos) : 'Q 0'}</div>
           <span className="text-xs text-[var(--text-muted)] truncate">
-            {productoTop ? productoTop.nombre.slice(0, 25) + '...' : '—'}
+            {servicioTop ? servicioTop.nombre.slice(0, 25) + '...' : '—'}
           </span>
         </div>
       </div>
 
-      {/* ============================================
-          GRÁFICA COMPARATIVA POR LÍNEA
-      ============================================ */}
+      {/* GRÁFICA COMPARATIVA POR LÍNEA */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="card lg:col-span-2">
           <div className="section-header">
             <ChartPieIcon className="w-5 h-5 text-[var(--accent-blue)]" />
-            <h2 className="font-semibold">Comparativa de Ventas por Línea</h2>
-            <span className="ml-auto text-xs text-[var(--text-muted)]">Unidades por mes</span>
+            <h2 className="font-semibold">Comparativa de Servicios por Línea</h2>
+            <span className="ml-auto text-xs text-[var(--text-muted)]">Volumen por mes (kg)</span>
           </div>
           <div className="p-5 pt-0">
             <GraficaComparativaLineas datosPorLinea={datosPorLinea} meses={demoMesesHistorial} />
@@ -264,7 +280,7 @@ export default function HistorialVentas() {
         <div className="card">
           <div className="section-header">
             <CalendarIcon className="w-5 h-5 text-[var(--accent-orange)]" />
-            <h2 className="font-semibold">Ventas por Mes</h2>
+            <h2 className="font-semibold">Volumen por Mes</h2>
           </div>
           <div className="p-5 pt-0 space-y-3">
             {totalesPorMes.map((v, i) => (
@@ -279,20 +295,18 @@ export default function HistorialVentas() {
                     }}
                   />
                 </div>
-                <span className="w-16 text-right text-xs font-mono">{formatNum(v)}</span>
+                <span className="w-16 text-right text-xs font-mono">{formatNum(v)} kg</span>
               </div>
             ))}
             <div className="pt-2 border-t border-[var(--border-default)] flex items-center justify-between">
               <span className="text-xs font-medium text-[var(--text-primary)]">Total 6 meses</span>
-              <span className="text-sm font-bold font-mono">{formatNum(totalUnidades)} und</span>
+              <span className="text-sm font-bold font-mono">{formatNum(totalVolumen)} kg</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ============================================
-          FILTROS + VISTA
-      ============================================ */}
+      {/* FILTROS + VISTA */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-2 flex-wrap">
           <FunnelIcon className="w-4 h-4 text-[var(--text-muted)]" />
@@ -335,15 +349,13 @@ export default function HistorialVentas() {
         </div>
       </div>
 
-      {/* ============================================
-          VISTA TARJETAS
-      ============================================ */}
+      {/* VISTA TARJETAS */}
       {vista === 'tarjetas' && (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {productosFiltrados.map((producto, idx) => {
-            const color = coloresLinea[producto.linea] || '#001639'
+          {serviciosFiltrados.map((servicio, idx) => {
+            const color = coloresLinea[servicio.linea] || '#001639'
             return (
-              <div key={producto.id} className="card card-hover">
+              <div key={servicio.id} className="card card-hover">
                 <div className="p-5">
                   {/* Header */}
                   <div className="flex items-center justify-between mb-3">
@@ -352,31 +364,31 @@ export default function HistorialVentas() {
                         <span className="text-xs font-bold" style={{ color }}>{idx + 1}</span>
                       </div>
                       <div>
-                        <span className="text-[10px] uppercase font-medium text-[var(--text-muted)]">{producto.linea}</span>
+                        <span className="text-[10px] uppercase font-medium text-[var(--text-muted)]">{servicio.linea}</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
-                      {producto.tendencia === 'up' ? (
+                      {servicio.tendencia === 'up' ? (
                         <ArrowTrendingUpIcon className="w-4 h-4 text-[var(--success)]" />
-                      ) : producto.tendencia === 'down' ? (
+                      ) : servicio.tendencia === 'down' ? (
                         <ArrowTrendingDownIcon className="w-4 h-4 text-[var(--danger)]" />
                       ) : (
                         <MinusIcon className="w-4 h-4 text-[var(--text-muted)]" />
                       )}
-                      <span className={`text-xs font-mono ${producto.crecimiento > 0 ? 'text-[var(--success)]' : producto.crecimiento < 0 ? 'text-[var(--danger)]' : 'text-[var(--text-muted)]'}`}>
-                        {producto.crecimiento > 0 ? '+' : ''}{producto.crecimiento}%
+                      <span className={`text-xs font-mono ${servicio.crecimiento > 0 ? 'text-[var(--success)]' : servicio.crecimiento < 0 ? 'text-[var(--danger)]' : 'text-[var(--text-muted)]'}`}>
+                        {servicio.crecimiento > 0 ? '+' : ''}{servicio.crecimiento}%
                       </span>
                     </div>
                   </div>
 
                   {/* Nombre */}
                   <p className="text-sm font-medium text-[var(--text-primary)] mb-3 line-clamp-2">
-                    {producto.nombre}
+                    {servicio.nombre}
                   </p>
 
                   {/* Gráfica */}
                   <GraficaHistorial
-                    historial={producto.historial}
+                    historial={servicio.historial}
                     color={color}
                     maxValor={maxValorHistorial}
                     meses={demoMesesHistorial}
@@ -393,31 +405,31 @@ export default function HistorialVentas() {
                   <div className="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-[var(--border-default)]">
                     <div>
                       <p className="text-[10px] text-[var(--text-muted)] uppercase">Total 6M</p>
-                      <p className="text-sm font-bold font-mono">{formatNum(producto.totalUnidades)}</p>
+                      <p className="text-sm font-bold font-mono">{formatNum(servicio.totalVolumen)} kg</p>
                     </div>
                     <div>
                       <p className="text-[10px] text-[var(--text-muted)] uppercase">Prom/Mes</p>
-                      <p className="text-sm font-bold font-mono">{formatNum(producto.promedioMensual)}</p>
+                      <p className="text-sm font-bold font-mono">{formatNum(servicio.promedioMensual)} kg</p>
                     </div>
                     <div>
                       <p className="text-[10px] text-[var(--text-muted)] uppercase">Ingresos</p>
-                      <p className="text-sm font-bold font-mono">{formatGTQ(producto.totalIngresos)}</p>
+                      <p className="text-sm font-bold font-mono">{formatGTQ(servicio.totalIngresos)}</p>
                     </div>
                   </div>
 
-                  {/* Relación con compras */}
+                  {/* Margen y precio */}
                   <div className="mt-3 p-2 bg-[var(--bg-secondary)] rounded-lg">
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-[var(--text-muted)]">Margen:</span>
-                      <span className="font-mono font-medium" style={{ color }}>{producto.margen}%</span>
+                      <span className="font-mono font-medium" style={{ color }}>{servicio.margen}%</span>
                     </div>
                     <div className="flex items-center justify-between text-xs mt-1">
                       <span className="text-[var(--text-muted)]">Precio:</span>
-                      <span className="font-mono">Q {producto.precioVenta} / Q {producto.costoUnitario}</span>
+                      <span className="font-mono">Q {servicio.precioVenta} / kg</span>
                     </div>
                     <div className="flex items-center justify-between text-xs mt-1">
-                      <span className="text-[var(--text-muted)]">Proveedor:</span>
-                      <span className="text-[var(--text-secondary)] truncate ml-2">{producto.proveedor}</span>
+                      <span className="text-[var(--text-muted)]">Costo:</span>
+                      <span className="font-mono">Q {servicio.costoUnitario} / kg</span>
                     </div>
                   </div>
                 </div>
@@ -427,14 +439,12 @@ export default function HistorialVentas() {
         </div>
       )}
 
-      {/* ============================================
-          VISTA TABLA
-      ============================================ */}
+      {/* VISTA TABLA */}
       {vista === 'tabla' && (
         <div className="card">
           <div className="section-header">
             <ChartBarIcon className="w-5 h-5 text-[var(--text-primary)]" />
-            <h2 className="font-semibold">Detalle de Ventas por Producto</h2>
+            <h2 className="font-semibold">Detalle de Servicios por Línea</h2>
             <span className="ml-auto text-xs text-[var(--text-muted)]">6 meses de historial</span>
           </div>
 
@@ -443,60 +453,60 @@ export default function HistorialVentas() {
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Producto</th>
+                  <th>Servicio</th>
                   <th>Línea</th>
                   {demoMesesHistorial.map(m => (
                     <th key={m} className="text-right">{m.split(' ')[0]}</th>
                   ))}
-                  <th className="text-right">Total Und</th>
+                  <th className="text-right">Total Vol</th>
                   <th className="text-right">Ingresos</th>
                   <th className="text-right">Margen</th>
                   <th className="text-center">Tendencia</th>
                 </tr>
               </thead>
               <tbody>
-                {productosFiltrados.map((producto, idx) => (
-                  <tr key={producto.id}>
+                {serviciosFiltrados.map((servicio, idx) => (
+                  <tr key={servicio.id}>
                     <td>
                       <span className="text-xs text-[var(--text-muted)]">{idx + 1}</span>
                     </td>
                     <td>
-                      <p className="font-medium text-sm">{producto.nombre}</p>
+                      <p className="font-medium text-sm">{servicio.nombre}</p>
                       <p className="text-[10px] text-[var(--text-muted)]">
-                        Q {producto.precioVenta} venta · Q {producto.costoUnitario} costo
+                        Q {servicio.precioVenta} venta · Q {servicio.costoUnitario} costo
                       </p>
                     </td>
                     <td>
                       <span
                         className="badge text-[10px]"
                         style={{
-                          backgroundColor: coloresLinea[producto.linea] + '15',
-                          color: coloresLinea[producto.linea],
+                          backgroundColor: coloresLinea[servicio.linea] + '15',
+                          color: coloresLinea[servicio.linea],
                         }}
                       >
-                        {producto.linea}
+                        {servicio.linea}
                       </span>
                     </td>
-                    {producto.historial.map((v, i) => (
+                    {servicio.historial.map((v, i) => (
                       <td key={i} className="text-right font-mono text-sm">
-                        <span className={v > producto.promedioMensual * 1.2 ? 'text-[var(--success)] font-medium' : v < producto.promedioMensual * 0.8 ? 'text-[var(--danger)]' : ''}>
+                        <span className={v > servicio.promedioMensual * 1.2 ? 'text-[var(--success)] font-medium' : v < servicio.promedioMensual * 0.8 ? 'text-[var(--danger)]' : ''}>
                           {formatNum(v)}
                         </span>
                       </td>
                     ))}
-                    <td className="text-right font-mono font-semibold">{formatNum(producto.totalUnidades)}</td>
-                    <td className="text-right font-mono font-medium">{formatGTQ(producto.totalIngresos)}</td>
+                    <td className="text-right font-mono font-semibold">{formatNum(servicio.totalVolumen)} kg</td>
+                    <td className="text-right font-mono font-medium">{formatGTQ(servicio.totalIngresos)}</td>
                     <td className="text-right font-mono text-sm">
-                      <span className="text-[var(--success)]">{formatGTQ(producto.totalIngresos * (producto.margen / 100))}</span>
+                      <span className="text-[var(--success)]">{formatGTQ(servicio.totalIngresos * (servicio.margen / 100))}</span>
                     </td>
                     <td className="text-center">
-                      {producto.tendencia === 'up' ? (
+                      {servicio.tendencia === 'up' ? (
                         <span className="badge-success text-[10px] flex items-center justify-center gap-1">
-                          <ArrowTrendingUpIcon className="w-3 h-3" /> +{producto.crecimiento}%
+                          <ArrowTrendingUpIcon className="w-3 h-3" /> +{servicio.crecimiento}%
                         </span>
-                      ) : producto.tendencia === 'down' ? (
+                      ) : servicio.tendencia === 'down' ? (
                         <span className="badge-danger text-[10px] flex items-center justify-center gap-1">
-                          <ArrowTrendingDownIcon className="w-3 h-3" /> {producto.crecimiento}%
+                          <ArrowTrendingDownIcon className="w-3 h-3" /> {servicio.crecimiento}%
                         </span>
                       ) : (
                         <span className="badge-neutral text-[10px]">→ Estable</span>
@@ -513,8 +523,8 @@ export default function HistorialVentas() {
             <div className="p-4 bg-[var(--bg-secondary)] rounded-lg">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                 <div>
-                  <p className="text-xs text-[var(--text-muted)] uppercase">Total Unidades</p>
-                  <p className="text-lg font-bold font-mono">{formatNum(totalUnidades)}</p>
+                  <p className="text-xs text-[var(--text-muted)] uppercase">Total Volumen</p>
+                  <p className="text-lg font-bold font-mono">{formatNum(totalVolumen)} kg</p>
                 </div>
                 <div>
                   <p className="text-xs text-[var(--text-muted)] uppercase">Ingresos Totales</p>

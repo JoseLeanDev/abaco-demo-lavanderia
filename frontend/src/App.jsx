@@ -54,7 +54,7 @@ function AppRoutes() {
                 <Route path="/contabilidad" element={<Contabilidad />} />
                 <Route path="/analisis" element={<Analisis />} />
                 <Route path="/gastos-operativos" element={<GastosOperativos />} />
-                <Route path="/compras/historial-ventas" element={<HistorialVentas />} />
+                <Route path="/gastos-operativos/historial-servicios" element={<HistorialVentas />} />
                 <Route path="/sat" element={<SAT />} />
                 <Route path="/log-actividades" element={<LogActividades />} />
                 <Route path="/usuarios" element={<Usuarios />} />

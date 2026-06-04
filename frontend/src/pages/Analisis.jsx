@@ -20,7 +20,7 @@ export default function Analisis() {
       {/* AI Insights */}
       <PageInsights context="analisis" maxInsights={3} />
 
-      {/* Subsección: Análisis de Ventas (Productos, Tiendas, Clientes) */}
+      {/* Subsección: Análisis de Ventas (Servicios, Sucursales, Clientes) */}
       <AnalisisVentas />
 
       {/* Subsección: Gastos y Nómina */}
@@ -55,17 +55,17 @@ export default function Analisis() {
           
           <div className="space-y-4 p-5 pt-0">
             {[
-              { dimension: 'Por Producto', producto: 'Producto A', rentabilidad: 35, unidades: 1250 },
-              { dimension: 'Por Línea', producto: 'Línea Industrial', rentabilidad: 28, unidades: 890 },
-              { dimension: 'Por Cliente', producto: 'Cliente XYZ', rentabilidad: 42, unidades: 45 },
-              { dimension: 'Por Sucursal', producto: 'Sede Central', rentabilidad: 38, unidades: 2100 },
+              { dimension: 'Por Servicio', servicio: 'Lavandería B2B Hotelería', rentabilidad: 45, unidades: 8500 },
+              { dimension: 'Por Línea', servicio: 'B2B - Hotelería', rentabilidad: 42, unidades: 6200 },
+              { dimension: 'Por Cliente', servicio: 'Hotel Real Intercontinental', rentabilidad: 48, unidades: 45 },
+              { dimension: 'Por Sucursal', servicio: 'Sucursal Central Zona 10', rentabilidad: 38, unidades: 2100 },
             ].map((item, idx) => (
               <div key={idx} className="p-4 bg-[var(--bg-secondary)] rounded-lg">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-[var(--text-muted)]">{item.dimension}</span>
                   <span className="font-bold tabular-nums">{item.rentabilidad}%</span>
                 </div>
-                <p className="text-sm text-[var(--text-primary)]">{item.producto}</p>
+                <p className="text-sm text-[var(--text-primary)]">{item.servicio}</p>
                 <div className="mt-2 h-2 bg-white rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-[#001639] rounded-full"
@@ -90,7 +90,7 @@ export default function Analisis() {
               { nombre: 'Prueba Ácida', actual: 1.32, anterior: 1.15, umbral: 1.0, unidad: '' },
               { nombre: 'Endeudamiento', actual: 0.45, anterior: 0.52, umbral: 0.6, unidad: '' },
               { nombre: 'ROE', actual: 22.5, anterior: 19.8, umbral: 15.0, unidad: '%' },
-              { nombre: 'Rotación de Inventario', actual: 8.5, anterior: 7.2, umbral: 6.0, unidad: 'x' },
+              { nombre: 'Capacidad de Utilización', actual: 85.5, anterior: 78.2, umbral: 70.0, unidad: '%' },
             ].map((ratio, idx) => {
               const variacion = ((ratio.actual - ratio.anterior) / ratio.anterior * 100).toFixed(1)
               const esPositivo = ratio.actual > ratio.anterior
