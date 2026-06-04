@@ -176,7 +176,7 @@ app.use((req, res) => {
   });
 });
 
-app.listen(PORT, async () => {
+const server = app.listen(PORT, () => {
   console.log(`
 ╔══════════════════════════════════════════════════════════╗
 ║              abaco - Backend API v2.0                 ║
@@ -197,28 +197,35 @@ app.listen(PORT, async () => {
   console.log(`Agentes API: http://localhost:${PORT}/api/agents`);
   console.log(`Health check: http://localhost:${PORT}/api/health`);
   
-  // Initialize abaco Core v2.0
-  await initializeAgents();
-  
-  // Setup auth tables
-  await setupAuthTables();
-  
-  // Seed database if empty
-  await seedDatabaseIfEmpty();
-  
-  // Initialize abaco Scheduler
-  try {
-    const CFOScheduler = require('./scheduler/CFOScheduler');
-    const scheduler = new CFOScheduler({
-      apiBaseUrl: `http://localhost:${PORT}/api`,
-      empresaId: process.env.DEFAULT_EMPRESA_ID || 1
-    });
-    await scheduler.init();
-    scheduler.start();
-    console.log(`\n⏰ abaco Scheduler iniciado: ${scheduler.tasks.length} tareas programadas activas`);
-  } catch (error) {
-    console.error('❌ Error iniciando abaco Scheduler:', error.message);
-  }
+  // Initialize everything in background (non-blocking)
+  setTimeout(async () => {
+    try {
+      // Initialize abaco Core v2.0
+      await initializeAgents();
+      
+      // Setup auth tables
+      await setupAuthTables();
+      
+      // Seed database if empty
+      await seedDatabaseIfEmpty();
+      
+      // Initialize abaco Scheduler
+      try {
+        const CFOScheduler = require('./scheduler/CFOScheduler');
+        const scheduler = new CFOScheduler({
+          apiBaseUrl: `http://localhost:${PORT}/api`,
+          empresaId: process.env.DEFAULT_EMPRESA_ID || 1
+        });
+        await scheduler.init();
+        scheduler.start();
+        console.log(`\n⏰ abaco Scheduler iniciado: ${scheduler.tasks.length} tareas programadas activas`);
+      } catch (error) {
+        console.error('❌ Error iniciando abaco Scheduler:', error.message);
+      }
+    } catch (error) {
+      console.error('❌ Error en inicialización background:', error.message);
+    }
+  }, 100);
 });
 
 module.exports = app;
