@@ -4,81 +4,10 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const path = require('path');
-const { getCFOAICore, initializeCFOAICore } = require('./agents');
 const db = require('../database/connection');
-const { seedData } = require('../database/seed');
-const { setupDatabase } = require('../database/setupAuto');
-const { wakeUpMiddleware, ejecutarTareasPendientesWakeUp } = require('./services/wakeUpScheduler');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-// Initialize abaco Core v2.0
-async function initializeAgents() {
-  try {
-    const core = initializeCFOAICore();
-    app.set('CFOAICore', core);
-    console.log('🤖 abaco Core v2.0 iniciado exitosamente');
-    console.log('   Agentes: 💰 Caja • 📊 Análisis • 💵 Cobranza • 📗 Contabilidad');
-  } catch (error) {
-    console.error('❌ Error inicializando CFO AI Core:', error.message);
-  }
-}
-
-// Setup auth tables (auto-migration on startup)
-async function setupAuthTables() {
-  try {
-    console.log('🔐 Verificando tabla usuarios...');
-    
-    // Crear tabla usuarios si no existe
-    const createResult = await db.runAsync(`
-      CREATE TABLE IF NOT EXISTS usuarios (
-        id SERIAL PRIMARY KEY,
-        nombre VARCHAR(255) NOT NULL,
-        email VARCHAR(255) UNIQUE NOT NULL,
-        password_hash VARCHAR(255) NOT NULL,
-        rol VARCHAR(50) DEFAULT 'usuario',
-        avatar_url VARCHAR(500),
-        activo BOOLEAN DEFAULT TRUE,
-        ultimo_login TIMESTAMP,
-        created_at TIMESTAMP DEFAULT NOW(),
-        updated_at TIMESTAMP DEFAULT NOW()
-      )
-    `, []);
-    console.log('   CREATE TABLE result:', createResult);
-    
-    // Verificar si el usuario demo existe
-    const demoUser = await db.getAsync(
-      'SELECT id FROM usuarios WHERE email = $1',
-      ['demo@cfoai.com']
-    );
-    
-    if (!demoUser) {
-      const insertResult = await db.runAsync(`
-        INSERT INTO usuarios (id, nombre, email, password_hash, rol)
-        VALUES (1, 'Usuario Demo', 'demo@cfoai.com', '$2b$10$wZ/MyH.ecgVvcPD3o06n.OYjy1I1c74BQSG0CKvUbVQkEM6Zcm1aC', 'admin')
-      `, []);
-      console.log('   INSERT demo result:', insertResult);
-      console.log('✅ Usuario demo creado');
-    } else {
-      console.log('   Usuario demo ya existe');
-    }
-    
-    console.log('✅ Tabla usuarios lista');
-  } catch (error) {
-    console.error('⚠️ Error setup auth tables:', error.message);
-    console.error('   Stack:', error.stack);
-  }
-}
-
-// Seed database with full setup
-async function seedDatabaseIfEmpty() {
-  try {
-    await setupDatabase();
-  } catch (error) {
-    console.error('❌ Error en setup:', error.message);
-  }
-}
 
 // Middleware
 app.use(helmet());
@@ -89,9 +18,6 @@ app.use(cors({
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Wake-up scheduler middleware
-app.use(wakeUpMiddleware);
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
@@ -112,31 +38,19 @@ app.use('/api/debug', require('./routes/debug'));
 app.use('/api/test', require('./routes/test'));
 app.use('/api/debug-schema', require('./routes/debug-schema'));
 
-// Health check
+// Health check - ULTRA SIMPLE
 app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-    version: '1.0.0',
-    environment: process.env.NODE_ENV || 'production'
-  });
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Manual setup endpoint (for admin use)
-app.get('/api/setup', async (req, res) => {
+// Force setup endpoint
+app.get('/api/force-setup', async (req, res) => {
   try {
+    const { setupDatabase } = require('../database/setupAuto');
     const result = await setupDatabase();
-    res.json({
-      status: result ? 'success' : 'error',
-      message: result ? 'Database setup completed' : 'Setup failed',
-      timestamp: new Date().toISOString()
-    });
+    res.json({ status: result ? 'success' : 'error', timestamp: new Date().toISOString() });
   } catch (error) {
-    res.status(500).json({
-      status: 'error',
-      message: error.message,
-      timestamp: new Date().toISOString()
-    });
+    res.json({ status: 'error', message: error.message });
   }
 });
 
@@ -160,70 +74,21 @@ if (fs.existsSync(frontendDistPath)) {
 // Error handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({
-    status: 'error',
-    message: process.env.NODE_ENV === 'development' ? err.message : 'Error interno del servidor',
-    timestamp: new Date().toISOString()
-  });
+  res.status(500).json({ status: 'error', message: err.message });
 });
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({
-    status: 'error',
-    message: 'Endpoint no encontrado',
-    timestamp: new Date().toISOString()
-  });
-});
-
-const server = app.listen(PORT, () => {
-  console.log(`
-╔══════════════════════════════════════════════════════════╗
-║              abaco - Backend API v2.0                 ║
-╠══════════════════════════════════════════════════════════╣
-║  🚀 Servidor corriendo en puerto ${PORT}                   ║
-║  📊 abaco Core v2.0: ACTIVO                             ║
-║  🤖 Agentes: 💰 Caja • 📊 Análisis • 📋 Cobranza • 📅 Contabilidad
-╠══════════════════════════════════════════════════════════╣
-║  Tareas Programadas:                                     ║
-║    Caja:        Cada hora 7AM-6PM • 6AM proyección      ║
-║    Análisis:    5AM diario • Lun 5AM • Día 1 6AM        ║
-║    Cobranza:    Cada hora 7AM-6PM • 6AM • Lun 5:30AM   ║
-║    Contabilidad: 5AM diario • Vie 6PM • Día 1 4AM       ║
-║    Briefing:    7:00 AM diario                           ║
-╚══════════════════════════════════════════════════════════╝
-  `);
-  console.log(`API disponible en: http://localhost:${PORT}/api`);
-  console.log(`Agentes API: http://localhost:${PORT}/api/agents`);
-  console.log(`Health check: http://localhost:${PORT}/api/health`);
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`Health: http://localhost:${PORT}/api/health`);
   
-  // Initialize everything in background (non-blocking)
+  // Background setup only - NO BLOCKING
   setTimeout(async () => {
     try {
-      // Initialize abaco Core v2.0
-      await initializeAgents();
-      
-      // Setup auth tables
-      await setupAuthTables();
-      
-      // Seed database if empty
-      await seedDatabaseIfEmpty();
-      
-      // Initialize abaco Scheduler
-      try {
-        const CFOScheduler = require('./scheduler/CFOScheduler');
-        const scheduler = new CFOScheduler({
-          apiBaseUrl: `http://localhost:${PORT}/api`,
-          empresaId: process.env.DEFAULT_EMPRESA_ID || 1
-        });
-        await scheduler.init();
-        scheduler.start();
-        console.log(`\n⏰ abaco Scheduler iniciado: ${scheduler.tasks.length} tareas programadas activas`);
-      } catch (error) {
-        console.error('❌ Error iniciando abaco Scheduler:', error.message);
-      }
-    } catch (error) {
-      console.error('❌ Error en inicialización background:', error.message);
+      const { setupDatabase } = require('../database/setupAuto');
+      await setupDatabase();
+      console.log('✅ Database setup complete');
+    } catch (e) {
+      console.error('❌ DB setup error:', e.message);
     }
   }, 100);
 });
