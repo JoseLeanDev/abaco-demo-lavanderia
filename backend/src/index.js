@@ -140,7 +140,11 @@ app.get('/api/keep-alive', async (req, res) => {
 const frontendDistPath = path.join(__dirname, '../../frontend/dist');
 const fs = require('fs');
 if (fs.existsSync(frontendDistPath)) {
-  app.use(express.static(frontendDistPath));
+  app.use(express.static(frontendDistPath, {
+    setHeaders: (res, path) => {
+      res.set('Access-Control-Allow-Origin', '*');
+    }
+  }));
   
   app.get('*', (req, res) => {
     if (!req.path.startsWith('/api')) {
