@@ -1,34 +1,111 @@
 services:
+  # Web Service - Backend API
   - type: web
     name: abaco-demo-lavanderia
-    runtime: node
-    buildCommand: cd backend && npm install && npm run migrate && npm run seed && cd ../frontend && npm install && npm run build
+    env: node
+    plan: standard
+    buildCommand: cd backend && npm install && npm run build || true
     startCommand: cd backend && npm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 10000
-    disk:
-      name: data
-      mountPath: /opt/render/project/src/backend/database
-      sizeGB: 1
+        value: 3000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: abaco-demo-lavanderia-db
+          property: connectionString
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: LLM_PROVIDER
+        value: openrouter
+      - key: APP_URL
+        value: https://abaco-demo-lavanderia.onrender.com
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DEFAULT_EMPRESA_ID
+        value: 1
+      - key: DEFAULT_USUARIO_ID
+        value: 1
+      - key: MONEDA_DEFAULT
+        value: GTQ
+      - key: TZ
+        value: America/Guatemala
+      - key: UMBRAL_LIQUIDEZ_CRITICO
+        value: 100000
+      - key: UMBRAL_LIQUIDEZ_ADVERTENCIA
+        value: 500000
+      - key: GASTO_DIARIO_DEFAULT
+        value: 50000
+      - key: UMBRAL_CXC_CRITICO
+        value: 500000
+      - key: UMBRAL_CXC_ADVERTENCIA
+        value: 100000
+      - key: CXC_DIAS_ATRASO_CRITICO
+        value: 60
+      - key: CXC_DIAS_ATRASO_ADVERTENCIA
+        value: 30
+      - key: CXP_PROXIMO_VENCIMIENTO_DIAS
+        value: 7
+      - key: CXP_MONTO_CRITICO
+        value: 100000
+      - key: PROYECCION_ENTRADA_DEFAULT
+        value: 420000
+      - key: PROYECCION_SALIDA_DEFAULT
+        value: 380000
+      - key: PROYECCION_SALDO_INICIAL
+        value: 1900000
+      - key: PROYECCION_SEMANAS
+        value: 12
+      - key: PROYECCION_UMBRAL_MINIMO
+        value: 1000000
+      - key: PROYECCION_UMBRAL_QUIEBRA
+        value: 500000
+      - key: WC_EFECTIVO_RETENIDO_FACTOR
+        value: 100000
+      - key: WC_DIAS_EXTENSION
+        value: 30
+      - key: WC_CXP_VENCIDO_CRITICO
+        value: 100000
+      - key: CONCENTRACION_CLIENTE_CRITICO
+        value: 0.20
+      - key: CONCENTRACION_CLIENTE_ADVERTENCIA
+        value: 0.15
+      - key: SAT_DIAS_ALERTA_IVA
+        value: 15
+      - key: SAT_DIAS_ALERTA_ISR
+        value: 15
+    healthCheckPath: /health
+    autoDeploy: true
 
-  # Background Worker: Scheduler Always-On
+  # Background Worker
   - type: worker
     name: abaco-demo-lavanderia-scheduler
-    runtime: node
+    env: node
+    plan: standard
     buildCommand: cd backend && npm install
-    startCommand: cd backend && node src/scheduler/run.js
+    startCommand: cd backend && node scheduler.js
     envVars:
       - key: NODE_ENV
         value: production
-      - key: API_BASE_URL
-        fromService:
-          name: abaco-demo-lavanderia
-          type: web
-          property: url
-      - key: DEFAULT_EMPRESA_ID
-        value: 1
+      - key: DATABASE_URL
+        fromDatabase:
+          name: abaco-demo-lavanderia-db
+          property: connectionString
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: LLM_PROVIDER
+        value: openrouter
+      - key: APP_URL
+        value: https://abaco-demo-lavanderia.onrender.com
+      - key: JWT_SECRET
+        generateValue: true
       - key: TZ
         value: America/Guatemala
+    autoDeploy: true
+
+databases:
+  - name: abaco-demo-lavanderia-db
+    plan: standard
+    databaseName: abaco_lavanderia_db
+    user: abaco_lavanderia_db_user
