@@ -37,6 +37,7 @@ app.use('/api/run-all-agents', require('./routes/runAllAgents'));
 app.use('/api/debug', require('./routes/debug'));
 app.use('/api/test', require('./routes/test'));
 app.use('/api/debug-schema', require('./routes/debug-schema'));
+app.use('/api/seed', require('./routes/seed'));
 
 // Health check - ULTRA SIMPLE
 app.get('/api/health', (req, res) => {
