@@ -7,7 +7,7 @@ const isPostgres = process.env.DATABASE_URL && process.env.DATABASE_URL.includes
 // CONFIGURACIÓN EMPRESARIAL - LAVANDERÍA
 // ============================================
 const EMPRESA = {
-  nombre: 'Lavandería La Esperanza, S.A.',
+  nombre: 'Lavandería El Siglo',
   nit: '8765432-1',
   direccion: '4ta Avenida 15-22, Zona 10, Guatemala',
   telefono: '+502 2334-5678',
