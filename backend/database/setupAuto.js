@@ -1,6 +1,6 @@
 require('dotenv').config();
-const db = require('./database/connection');
-const { seedData } = require('./database/seed');
+const db = require('./connection');
+const { seedData } = require('./seed');
 
 async function setupDatabase() {
   console.log('\n🚀 Verificando schema de base de datos...');
