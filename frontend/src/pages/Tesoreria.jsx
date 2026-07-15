@@ -249,7 +249,8 @@ export default function Tesoreria() {
 
       {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Cuentas Bancarias */}
+        {/* Cuentas Bancarias - OCULTO para Thermoplastica */}
+        {/*
         <div className="card">
           <div className="section-header">
             <BuildingLibraryIcon className="w-5 h-5 text-[var(--text-muted)]" />
@@ -310,6 +311,7 @@ export default function Tesoreria() {
             )}
           </div>
         </div>
+        */}
 
         {/* CxC Aging */}
         <div className="card">

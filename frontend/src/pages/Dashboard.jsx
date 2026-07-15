@@ -286,7 +286,8 @@ export default function Dashboard() {
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {/* SAT Vencimientos */}
+          {/* SAT Vencimientos - OCULTO para Thermoplastica */}
+          {false && (
           <div className="card">
             <div className="flex items-center gap-2 p-5 pb-4 border-b border-[var(--border-default)]">
               <BuildingOfficeIcon className="w-4 h-4 text-[var(--text-muted)]" />
@@ -327,6 +328,7 @@ export default function Dashboard() {
               <ChevronRightIcon className="w-3 h-3" />
             </Link>
           </div>
+          )}
 
           {/* abaco Assistant */}
           <div className="card bg-[#001639] text-white">
@@ -342,7 +344,7 @@ export default function Dashboard() {
               </div>
               
               <p className="text-sm opacity-80 mb-4">
-                Agentes inteligentes para análisis financiero, conciliación y cumplimiento fiscal.
+                Agentes inteligentes para análisis financiero y toma de decisiones.
               </p>
               
               <Link to="/log-actividades" className="flex items-center justify-center gap-2 w-full py-2.5 bg-white text-[#001639] font-medium rounded-md hover:bg-opacity-90 transition-colors">

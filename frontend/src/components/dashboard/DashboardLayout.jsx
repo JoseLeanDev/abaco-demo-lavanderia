@@ -21,9 +21,9 @@ const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon },
   { name: 'Gastos Operativos', href: '/gastos-operativos', icon: BanknotesIconNav },
   { name: 'Tesorería', href: '/tesoreria', icon: BanknotesIcon },
-  { name: 'Contabilidad', href: '/contabilidad', icon: BookOpenIcon },
+  // { name: 'Contabilidad', href: '/contabilidad', icon: BookOpenIcon },
   { name: 'Análisis', href: '/analisis', icon: ChartBarIcon },
-  { name: 'SAT', href: '/sat', icon: DocumentCheckIcon },
+  // { name: 'SAT', href: '/sat', icon: DocumentCheckIcon },
   { name: 'Agentes IA', href: '/log-actividades', icon: CpuChipIcon },
   { name: 'Usuarios', href: '/usuarios', icon: UsersIcon, adminOnly: true },
 ]
