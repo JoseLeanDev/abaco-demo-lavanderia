@@ -356,7 +356,7 @@ export default function Dashboard() {
           <div className="card">
             <div className="section-header">
               <UsersIcon className="w-5 h-5 text-[var(--text-muted)]" />
-              <h2 className="font-semibold">CxC — Antigüedad</h2>
+              <h2 className="font-semibold">Cuentas por Cobrar</h2>
               <Link to="/tesoreria/cuentas-por-cobrar" className="ml-auto text-xs text-[var(--accent-blue)] hover:underline">Ver →</Link>
             </div>
             <div className="p-5">
@@ -397,7 +397,7 @@ export default function Dashboard() {
           <div className="card">
             <div className="section-header">
               <BuildingOfficeIcon className="w-5 h-5 text-[var(--text-muted)]" />
-              <h2 className="font-semibold">CxP — Próximos Vencimientos</h2>
+              <h2 className="font-semibold">Cuentas por Pagar</h2>
               <Link to="/tesoreria/cuentas-por-pagar" className="ml-auto text-xs text-[var(--accent-blue)] hover:underline">Ver →</Link>
             </div>
             <div className="p-5 space-y-3">
