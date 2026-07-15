@@ -326,7 +326,7 @@ export default function Ventas() {
                   <div key={i} className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
                       style={{ backgroundColor: COLORS_PIPELINE[i] }}
-003e
+                    >
                       {p.cantidad}
                     </div>
                     <div className="flex-1 min-w-0">
