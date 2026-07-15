@@ -13,10 +13,10 @@ import {
   LightBulbIcon,
   SparklesIcon,
   ChevronRightIcon,
-  ArrowTrendingUpIcon,
+  ArrowTendenciaUpIcon,
   ArrowPathIcon,
   CpuChipIcon,
-  ArrowTrendingDownIcon,
+  ArrowTendenciaDownIcon,
   ClockIcon
 } from '@heroicons/react/24/outline'
 import { demoClientesConcentracion } from '../data/demoData'
@@ -83,7 +83,7 @@ export default function Dashboard() {
   // CCC data from working capital API
   const ccc = wcData?.data?.metricas_principales?.c2c || {}
   const cccValor = ccc.valor || 0
-  const cccBenchmark = ccc.benchmark || 33
+  const cccReferencia = ccc.benchmark || 33
 
   // Insight styles
   const getInsightStyles = (tipo) => {
@@ -122,7 +122,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* KPI Grid */}
+      {/* Indicadores Clave */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="kpi-card card-hover">
           <div className="flex items-center justify-between mb-2">
@@ -146,18 +146,18 @@ export default function Dashboard() {
 
         <div className="kpi-card card-hover">
           <div className="flex items-center justify-between mb-2">
-            <span className="kpi-label">Cash Conversion Cycle</span>
+            <span className="kpi-label">Ciclo de Conversión</span>
             <ClockIcon className="w-4 h-4 text-[var(--text-muted)]" />
           </div>
           <div className="kpi-value">{isLoading || isLoadingWC ? '---' : `${cccValor} días`}</div>
-          <span className={`text-xs ${cccValor > cccBenchmark * 1.5 ? 'text-[var(--danger)]' : cccValor > cccBenchmark ? 'text-[var(--warning)]' : 'text-[var(--success)]'}`}>
-            {cccValor > cccBenchmark * 1.5 ? 'Crítico' : cccValor > cccBenchmark ? 'Atención' : 'Óptimo'} (vs {cccBenchmark}d)
+          <span className={`text-xs ${cccValor > cccReferencia * 1.5 ? 'text-[var(--danger)]' : cccValor > cccReferencia ? 'text-[var(--warning)]' : 'text-[var(--success)]'}`}>
+            {cccValor > cccReferencia * 1.5 ? 'Crítico' : cccValor > cccReferencia ? 'Atención' : 'Óptimo'} (vs {cccReferencia}d)
           </span>
         </div>
 
         <div className="kpi-card card-hover">
           <div className="flex items-center justify-between mb-2">
-            <span className="kpi-label">Working Capital</span>
+            <span className="kpi-label">Capital de Trabajo</span>
             <ArrowPathIcon className="w-4 h-4 text-[var(--text-muted)]" />
           </div>
           <div className={`kpi-value ${workingCapital < 0 ? 'text-[var(--danger)]' : ''}`}>
@@ -167,7 +167,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Runway Calculator - Insight Crítico */}
+      {/* Calculadora de Reserva - Insight Crítico */}
       <RunwayCalculator 
         saldoActual={tesoreria.total_gtq || 0}
         promedioIngresosMensual={operacion.avg_ingresos_mes || 0}
@@ -175,7 +175,7 @@ export default function Dashboard() {
         proyeccionMeses={12}
       />
 
-      {/* Customer Concentration Risk - Insight #1 */}
+      {/* Concentración de Clientes - Riesgo - Insight #1 */}
       <CustomerConcentrationRisk 
         clientes={demoClientesConcentracion}
         umbralAlerta={20}
@@ -188,7 +188,7 @@ export default function Dashboard() {
           <div className="card">
             <div className="section-header">
               <SparklesIcon className="w-5 h-5 text-[var(--accent-blue)]" />
-              <h2 className="font-semibold">Insights de IA</h2>              
+              <h2 className="font-semibold">Análisis de IA</h2>              
             </div>
 
             {isLoadingInsights ? (
@@ -202,7 +202,7 @@ export default function Dashboard() {
                 <div className="empty-state-icon">
                   <LightBulbIcon className="w-6 h-6" />
                 </div>
-                <p className="text-sm text-[var(--text-muted)]">No hay insights disponibles</p>
+                <p className="text-sm text-[var(--text-muted)]">No hay análisis disponibles</p>
               </div>
             ) : (
               <div className="space-y-3 p-5 pt-0">
@@ -354,7 +354,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Quick Stats */}
+          {/* Estadísticas Rápidas */}
           <div className="grid grid-cols-2 gap-3">
             <div className="p-4 bg-white rounded-lg border border-[var(--border-default)]">
               <p className="text-[10px] text-[var(--text-muted)] uppercase font-medium">Agentes</p>

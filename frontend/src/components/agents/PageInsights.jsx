@@ -39,7 +39,7 @@ export default function PageInsights({
     tesoreria: 'Insights de Tesorería',
     contabilidad: 'Insights Contables',
     analisis: 'Insights de Análisis',
-    general: 'Insights de IA'
+    general: 'Análisis de IA'
   }
   
   const title = customTitle || titles[context] || titles.general

@@ -3,7 +3,7 @@ import { useQuery } from 'react-query'
 import { Link } from 'react-router-dom'
 import { endpoints } from '../services/cfoApi'
 import { 
-  ArrowTrendingUpIcon, 
+  ArrowTendenciaUpIcon, 
   ArrowLeftIcon,
   ArrowDownTrayIcon,
   MagnifyingGlassIcon,
@@ -73,7 +73,7 @@ export default function CuentasPorCobrar() {
           </Link>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-[#001639] flex items-center justify-center">
-              <ArrowTrendingUpIcon className="w-5 h-5 text-white" />
+              <ArrowTendenciaUpIcon className="w-5 h-5 text-white" />
             </div>
             <div>
               <h1 className="text-2xl font-semibold">Cuentas por Cobrar</h1>
@@ -88,7 +88,7 @@ export default function CuentasPorCobrar() {
         </button>
       </div>
 
-      {/* KPI Cards */}
+      {/* Indicadores Clave */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="kpi-card card-hover">
           <span className="kpi-label">Total por Cobrar</span>
@@ -115,7 +115,7 @@ export default function CuentasPorCobrar() {
         </div>
       </div>
 
-      {/* Aging Chart */}
+      {/* Gráfica de Antigüedad */}
       <div className="card">
         <div className="section-header">
           <ChartBarIcon className="w-5 h-5 text-[var(--text-muted)]" />

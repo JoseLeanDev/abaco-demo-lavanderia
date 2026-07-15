@@ -18,7 +18,7 @@ import { useAuth } from '../../context/AuthContext'
 import AgentChat from '../agents/AgentChat'
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: HomeIcon },
+  { name: 'Panel', href: '/', icon: HomeIcon },
   { name: 'Gastos Operativos', href: '/gastos-operativos', icon: BanknotesIconNav },
   { name: 'Tesorería', href: '/tesoreria', icon: BanknotesIcon },
   // { name: 'Contabilidad', href: '/contabilidad', icon: BookOpenIcon },
@@ -176,7 +176,7 @@ export default function DashboardLayout({ children }) {
                 <span className="text-[var(--text-muted)]">GT</span>
                 <span className="text-[var(--border-strong)]">/</span>
                 <span className="text-[var(--text-primary)] font-medium">
-                  {navigation.find(n => n.href === location.pathname)?.name || 'Dashboard'}
+                  {navigation.find(n => n.href === location.pathname)?.name || 'Panel'}
                 </span>
               </nav>
             </div>

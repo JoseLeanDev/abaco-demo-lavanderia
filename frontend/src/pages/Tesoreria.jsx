@@ -3,8 +3,8 @@ import { useTesoreriaPosicion, useTesoreriaCxC, useTesoreriaCxP, useTesoreriaPro
 import PageInsights from '../components/agents/PageInsights'
 import { 
   BanknotesIcon, 
-  ArrowTrendingUpIcon, 
-  ArrowTrendingDownIcon,
+  ArrowTendenciaUpIcon, 
+  ArrowTendenciaDownIcon,
   ClockIcon,
   BuildingLibraryIcon,
   ExclamationTriangleIcon,
@@ -49,10 +49,10 @@ export default function Tesoreria() {
         </div>
       </div>
 
-      {/* AI Insights */}
+      {/* Análisis de IA */}
       <PageInsights context="tesoreria" maxInsights={3} />
 
-      {/* KPI Cards */}
+      {/* Indicadores Clave */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="kpi-card card-hover">
           <div className="flex items-center justify-between mb-2">
@@ -81,7 +81,7 @@ export default function Tesoreria() {
         <div className="kpi-card card-hover">
           <div className="flex items-center justify-between mb-2">
             <span className="kpi-label">Total Consolidado</span>
-            <ArrowTrendingUpIcon className="w-4 h-4 text-[var(--success)]" />
+            <ArrowTendenciaUpIcon className="w-4 h-4 text-[var(--success)]" />
           </div>
           <div className="kpi-value">
             {loadingPos ? '---' : formatGTQ(posicionData.total_consolidado_gtq)}
@@ -102,14 +102,14 @@ export default function Tesoreria() {
         </div>
       </div>
 
-      {/* Cash Conversion Cycle Section */}
+      {/* Ciclo de Conversión Section */}
       <div className="card">
         <div className="section-header">
           <ArrowPathIcon className="w-5 h-5 text-[var(--text-muted)]" />
           <div className="flex-1">
-            <h2 className="font-semibold">Cash Conversion Cycle</h2>
+            <h2 className="font-semibold">Ciclo de Conversión</h2>
             <p className="text-xs text-[var(--text-muted)]">
-              {metricas.c2c?.interpretacion || 'Calculando...'} • Benchmark: {metricas.c2c?.benchmark || '—'} días
+              {metricas.c2c?.interpretacion || 'Calculando...'} • Referencia: {metricas.c2c?.benchmark || '—'} días
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -313,12 +313,12 @@ export default function Tesoreria() {
         </div>
         */}
 
-        {/* CxC Aging */}
+        {/* CxC - Antigüedad */}
         <div className="card">
           <div className="section-header">
-            <ArrowTrendingUpIcon className="w-5 h-5 text-[var(--text-muted)]" />
+            <ArrowTendenciaUpIcon className="w-5 h-5 text-[var(--text-muted)]" />
             <div className="flex-1">
-              <h2 className="font-semibold">CxC - Aging</h2>
+              <h2 className="font-semibold">CxC - Antigüedad</h2>
               <p className="text-xs text-[var(--text-muted)]">Promedio {cxcData.promedio_dias_cobro} días</p>
             </div>
             <span className="amount">{formatGTQ(cxcData.total_cxc)}</span>
@@ -383,7 +383,7 @@ export default function Tesoreria() {
         {/* CxP Próximos */}
         <div className="card">
           <div className="section-header">
-            <ArrowTrendingDownIcon className="w-5 h-5 text-[var(--text-muted)]" />
+            <ArrowTendenciaDownIcon className="w-5 h-5 text-[var(--text-muted)]" />
             <div className="flex-1">
               <h2 className="font-semibold">CxP Próximos</h2>
               <p className="text-xs text-[var(--text-muted)]">Promedio {cxpData.promedio_dias_pago} días</p>
@@ -429,7 +429,7 @@ export default function Tesoreria() {
         {/* Proyección Cash Flow */}
         <div className="card">
           <div className="section-header">
-            <ArrowTrendingUpIcon className="w-5 h-5 text-[var(--text-muted)]" />
+            <ArrowTendenciaUpIcon className="w-5 h-5 text-[var(--text-muted)]" />
             <div className="flex-1">
               <h2 className="font-semibold">Proyección Cash Flow</h2>
               <p className="text-xs text-[var(--text-muted)]">13 semanas</p>
