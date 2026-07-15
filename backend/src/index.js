@@ -9,6 +9,9 @@ const db = require('../database/connection');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Set db on app for routes
+app.set('db', db);
+
 // Middleware
 app.use(helmet());
 app.use(cors({
