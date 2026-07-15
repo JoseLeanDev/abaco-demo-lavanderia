@@ -12,6 +12,7 @@ import {
   ArrowRightOnRectangleIcon,
   UserCircleIcon,
   UsersIcon,
+  ShoppingBagIcon,
 } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
@@ -19,6 +20,7 @@ import AgentChat from '../agents/AgentChat'
 
 const navigation = [
   { name: 'Panel', href: '/', icon: HomeIcon },
+  { name: 'Ventas', href: '/ventas', icon: ShoppingBagIcon },
   { name: 'Gastos Operativos', href: '/gastos-operativos', icon: BanknotesIconNav },
   { name: 'Tesorería', href: '/tesoreria', icon: BanknotesIcon },
   // { name: 'Contabilidad', href: '/contabilidad', icon: BookOpenIcon },

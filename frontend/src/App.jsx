@@ -7,6 +7,7 @@ import Tesoreria from './pages/Tesoreria'
 import Analisis from './pages/Analisis'
 import GastosOperativos from './pages/GastosOperativos'
 import HistorialVentas from './pages/HistorialVentas'
+import Ventas from './pages/Ventas'
 // import SAT from './pages/SAT'
 import LogActividades from './pages/LogActividades'
 import Usuarios from './pages/Usuarios'
@@ -55,6 +56,7 @@ function AppRoutes() {
                 <Route path="/analisis" element={<Analisis />} />
                 <Route path="/gastos-operativos" element={<GastosOperativos />} />
                 <Route path="/gastos-operativos/historial-servicios" element={<HistorialVentas />} />
+                <Route path="/ventas" element={<Ventas />} />
                 {/* <Route path="/sat" element={<SAT />} /> */}
                 <Route path="/log-actividades" element={<LogActividades />} />
                 <Route path="/usuarios" element={<Usuarios />} />
