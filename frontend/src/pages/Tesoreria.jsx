@@ -318,7 +318,7 @@ export default function Tesoreria() {
           <div className="section-header">
             <ArrowTrendingUpIcon className="w-5 h-5 text-[var(--text-muted)]" />
             <div className="flex-1">
-              <h2 className="font-semibold">CxC - Antigüedad</h2>
+              <h2 className="font-semibold">Cuentas por Cobrar</h2>
               <p className="text-xs text-[var(--text-muted)]">Promedio {cxcData.promedio_dias_cobro} días</p>
             </div>
             <span className="amount">{formatGTQ(cxcData.total_cxc)}</span>
@@ -385,7 +385,7 @@ export default function Tesoreria() {
           <div className="section-header">
             <ArrowTrendingDownIcon className="w-5 h-5 text-[var(--text-muted)]" />
             <div className="flex-1">
-              <h2 className="font-semibold">CxP Próximos</h2>
+              <h2 className="font-semibold">Cuentas por Pagar</h2>
               <p className="text-xs text-[var(--text-muted)]">Promedio {cxpData.promedio_dias_pago} días</p>
             </div>
             <span className="amount">{formatGTQ(cxpData.total_cxp)}</span>
