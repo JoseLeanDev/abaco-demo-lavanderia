@@ -1,4 +1,4 @@
-import { ChartBarIcon, ArrowTendenciaUpIcon, ArrowTendenciaDownIcon } from '@heroicons/react/24/outline'
+import { ChartBarIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon } from '@heroicons/react/24/outline'
 import PageInsights from '../components/agents/PageInsights'
 import AnalisisVentas from '../components/dashboard/AnalisisVentas'
 import GastosNomina from '../components/dashboard/GastosNomina'
@@ -80,7 +80,7 @@ export default function Analisis() {
         {/* Ratios */}
         <div className="card">
           <div className="section-header">
-            <ArrowTendenciaUpIcon className="w-5 h-5 text-[var(--text-muted)]" />
+            <ArrowTrendingUpIcon className="w-5 h-5 text-[var(--text-muted)]" />
             <h2 className="font-semibold">Análisis vs Mes Anterior</h2>
           </div>
           
@@ -102,7 +102,7 @@ export default function Analisis() {
                     <p className="text-sm font-medium">{ratio.nombre}</p>
                     <div className="flex items-center gap-2 mt-1">
                       <span className={`text-xs flex items-center gap-1 ${esPositivo ? 'text-[var(--success)]' : 'text-[var(--danger)]'}`}>
-                        {esPositivo ? <ArrowTendenciaUpIcon className="w-3 h-3" /> : <ArrowTendenciaDownIcon className="w-3 h-3" />}
+                        {esPositivo ? <ArrowTrendingUpIcon className="w-3 h-3" /> : <ArrowTrendingDownIcon className="w-3 h-3" />}
                         {Math.abs(variacion)}%
                       </span>
                       <span className="text-xs text-[var(--text-muted)]">Umbral: {ratio.umbral}{ratio.unidad}</span>

@@ -3,7 +3,7 @@ import { useQuery } from 'react-query'
 import { Link } from 'react-router-dom'
 import { endpoints } from '../services/cfoApi'
 import { 
-  ArrowTendenciaUpIcon, 
+  ArrowTrendingUpIcon, 
   ArrowLeftIcon,
   ArrowDownTrayIcon,
   MagnifyingGlassIcon,
@@ -73,7 +73,7 @@ export default function CuentasPorCobrar() {
           </Link>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-[#001639] flex items-center justify-center">
-              <ArrowTendenciaUpIcon className="w-5 h-5 text-white" />
+              <ArrowTrendingUpIcon className="w-5 h-5 text-white" />
             </div>
             <div>
               <h1 className="text-2xl font-semibold">Cuentas por Cobrar</h1>

@@ -13,10 +13,10 @@ import {
   LightBulbIcon,
   SparklesIcon,
   ChevronRightIcon,
-  ArrowTendenciaUpIcon,
+  ArrowTrendingUpIcon,
   ArrowPathIcon,
   CpuChipIcon,
-  ArrowTendenciaDownIcon,
+  ArrowTrendingDownIcon,
   ClockIcon
 } from '@heroicons/react/24/outline'
 import { demoClientesConcentracion } from '../data/demoData'

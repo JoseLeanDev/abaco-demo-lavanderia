@@ -2,8 +2,8 @@ import { useState, useMemo } from 'react'
 import {
   BanknotesIcon,
   ExclamationTriangleIcon,
-  ArrowTendenciaUpIcon,
-  ArrowTendenciaDownIcon,
+  ArrowTrendingUpIcon,
+  ArrowTrendingDownIcon,
   BeakerIcon,
   UsersIcon,
   BoltIcon,
@@ -262,9 +262,9 @@ export default function GastosOperativos() {
   }
 
   const getTendenciaIcon = (tendencia) => {
-    if (tendencia > 5) return <ArrowTendenciaUpIcon className="w-4 h-4 text-red-500" />
-    if (tendencia > 0) return <ArrowTendenciaUpIcon className="w-4 h-4 text-orange-500" />
-    if (tendencia < -5) return <ArrowTendenciaDownIcon className="w-4 h-4 text-green-500" />
+    if (tendencia > 5) return <ArrowTrendingUpIcon className="w-4 h-4 text-red-500" />
+    if (tendencia > 0) return <ArrowTrendingUpIcon className="w-4 h-4 text-orange-500" />
+    if (tendencia < -5) return <ArrowTrendingDownIcon className="w-4 h-4 text-green-500" />
     return <MinusIcon className="w-4 h-4 text-gray-400" />
   }
 

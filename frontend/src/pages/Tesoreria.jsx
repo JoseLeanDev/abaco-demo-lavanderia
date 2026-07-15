@@ -3,8 +3,8 @@ import { useTesoreriaPosicion, useTesoreriaCxC, useTesoreriaCxP, useTesoreriaPro
 import PageInsights from '../components/agents/PageInsights'
 import { 
   BanknotesIcon, 
-  ArrowTendenciaUpIcon, 
-  ArrowTendenciaDownIcon,
+  ArrowTrendingUpIcon, 
+  ArrowTrendingDownIcon,
   ClockIcon,
   BuildingLibraryIcon,
   ExclamationTriangleIcon,
@@ -81,7 +81,7 @@ export default function Tesoreria() {
         <div className="kpi-card card-hover">
           <div className="flex items-center justify-between mb-2">
             <span className="kpi-label">Total Consolidado</span>
-            <ArrowTendenciaUpIcon className="w-4 h-4 text-[var(--success)]" />
+            <ArrowTrendingUpIcon className="w-4 h-4 text-[var(--success)]" />
           </div>
           <div className="kpi-value">
             {loadingPos ? '---' : formatGTQ(posicionData.total_consolidado_gtq)}
@@ -316,7 +316,7 @@ export default function Tesoreria() {
         {/* CxC - Antigüedad */}
         <div className="card">
           <div className="section-header">
-            <ArrowTendenciaUpIcon className="w-5 h-5 text-[var(--text-muted)]" />
+            <ArrowTrendingUpIcon className="w-5 h-5 text-[var(--text-muted)]" />
             <div className="flex-1">
               <h2 className="font-semibold">CxC - Antigüedad</h2>
               <p className="text-xs text-[var(--text-muted)]">Promedio {cxcData.promedio_dias_cobro} días</p>
@@ -383,7 +383,7 @@ export default function Tesoreria() {
         {/* CxP Próximos */}
         <div className="card">
           <div className="section-header">
-            <ArrowTendenciaDownIcon className="w-5 h-5 text-[var(--text-muted)]" />
+            <ArrowTrendingDownIcon className="w-5 h-5 text-[var(--text-muted)]" />
             <div className="flex-1">
               <h2 className="font-semibold">CxP Próximos</h2>
               <p className="text-xs text-[var(--text-muted)]">Promedio {cxpData.promedio_dias_pago} días</p>
@@ -429,7 +429,7 @@ export default function Tesoreria() {
         {/* Proyección Cash Flow */}
         <div className="card">
           <div className="section-header">
-            <ArrowTendenciaUpIcon className="w-5 h-5 text-[var(--text-muted)]" />
+            <ArrowTrendingUpIcon className="w-5 h-5 text-[var(--text-muted)]" />
             <div className="flex-1">
               <h2 className="font-semibold">Proyección Cash Flow</h2>
               <p className="text-xs text-[var(--text-muted)]">13 semanas</p>

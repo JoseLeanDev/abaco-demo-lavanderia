@@ -8,8 +8,8 @@ import {
   CubeIcon,
   CurrencyDollarIcon,
   ChartPieIcon,
-  ArrowTendenciaUpIcon,
-  ArrowTendenciaDownIcon,
+  ArrowTrendingUpIcon,
+  ArrowTrendingDownIcon,
   FunnelIcon,
   CalendarIcon,
   StarIcon,
@@ -369,9 +369,9 @@ export default function HistorialServicios() {
                     </div>
                     <div className="flex items-center gap-1">
                       {servicio.tendencia === 'up' ? (
-                        <ArrowTendenciaUpIcon className="w-4 h-4 text-[var(--success)]" />
+                        <ArrowTrendingUpIcon className="w-4 h-4 text-[var(--success)]" />
                       ) : servicio.tendencia === 'down' ? (
-                        <ArrowTendenciaDownIcon className="w-4 h-4 text-[var(--danger)]" />
+                        <ArrowTrendingDownIcon className="w-4 h-4 text-[var(--danger)]" />
                       ) : (
                         <MinusIcon className="w-4 h-4 text-[var(--text-muted)]" />
                       )}
@@ -502,11 +502,11 @@ export default function HistorialServicios() {
                     <td className="text-center">
                       {servicio.tendencia === 'up' ? (
                         <span className="badge-success text-[10px] flex items-center justify-center gap-1">
-                          <ArrowTendenciaUpIcon className="w-3 h-3" /> +{servicio.crecimiento}%
+                          <ArrowTrendingUpIcon className="w-3 h-3" /> +{servicio.crecimiento}%
                         </span>
                       ) : servicio.tendencia === 'down' ? (
                         <span className="badge-danger text-[10px] flex items-center justify-center gap-1">
-                          <ArrowTendenciaDownIcon className="w-3 h-3" /> {servicio.crecimiento}%
+                          <ArrowTrendingDownIcon className="w-3 h-3" /> {servicio.crecimiento}%
                         </span>
                       ) : (
                         <span className="badge-neutral text-[10px]">→ Estable</span>
