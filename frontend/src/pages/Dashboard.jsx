@@ -20,6 +20,7 @@ import {
   ChevronRightIcon,
   SparklesIcon
 } from '@heroicons/react/24/outline'
+import PageInsights from '../components/agents/PageInsights'
 
 const formatGTQ = (value) => {
   if (!value && value !== 0) return 'Q 0'
@@ -191,27 +192,8 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ALERTAS CFO */}
-      {alertasCFO.length > 0 && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-          {alertasCFO.map((a, i) => (
-            <div key={i} className={`p-3.5 rounded-lg border-l-4 flex items-center gap-3 ${
-              a.tipo === 'critico' ? 'bg-red-50 border-red-500' :
-              a.tipo === 'warning' ? 'bg-amber-50 border-amber-500' :
-              'bg-blue-50 border-blue-500'
-            }`}>
-              {a.tipo === 'critico' ? <ExclamationTriangleIcon className="w-5 h-5 text-red-600 flex-shrink-0" /> :
-               a.tipo === 'warning' ? <ClockIcon className="w-5 h-5 text-amber-600 flex-shrink-0" /> :
-               <CheckCircleIcon className="w-5 h-5 text-blue-600 flex-shrink-0" />}
-              <div>
-                <p className={`text-sm font-medium ${
-                  a.tipo === 'critico' ? 'text-red-800' : a.tipo === 'warning' ? 'text-amber-800' : 'text-blue-800'
-                }`}>{a.mensaje}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      {/* INSIGHTS DE IA - 2 COLUMNAS */}
+      <PageInsights context="dashboard" maxInsights={4} title="Insights Inteligentes" />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* COLUMNA PRINCIPAL */}
